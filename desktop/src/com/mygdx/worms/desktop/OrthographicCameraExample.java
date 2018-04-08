@@ -112,7 +112,9 @@ public class OrthographicCameraExample implements ApplicationListener {
     public void pause() {
     }
 
+    /*
     public static void main(String[] args) {
         new LwjglApplication(new OrthographicCameraExample());
     }
+    */
 }
