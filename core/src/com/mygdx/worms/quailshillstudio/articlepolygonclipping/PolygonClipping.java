@@ -5,10 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -35,6 +32,9 @@ public class 	PolygonClipping extends ApplicationAdapter {
 	private int count = 0;
    
     private float rotationSpeed;
+
+    //maxPoint es el punto maximo de recorrido en la pantalla en el eje x,y
+    private int maxPoint = 260;
 
 	@Override
 	public void create () {
@@ -107,6 +107,7 @@ public class 	PolygonClipping extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
+	    //tamaño inicial de la camara
         camera.viewportWidth = 100f;
         camera.viewportHeight = 100f * height/width;
         camera.update();
@@ -114,7 +115,6 @@ public class 	PolygonClipping extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        //mapSprite.getTexture().dispose();
         batch.dispose();
     }
 
@@ -215,14 +215,13 @@ public class 	PolygonClipping extends ApplicationAdapter {
 		}
 
 		//limite de zoom de la camara :)
-		camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 230/camera.viewportWidth);
+		camera.zoom = MathUtils.clamp(camera.zoom, 0.32f, 230/camera.viewportWidth);
 
 		float effectiveViewportWidth = camera.viewportWidth * camera.zoom;
 		float effectiveViewportHeight = camera.viewportHeight * camera.zoom;
 
-
 		//limita la vision del mapa a 0,0 como punto minimo, siendo 0,0 la parte inferior izquiera de la ventana
-		camera.position.x = MathUtils.clamp(camera.position.x, effectiveViewportWidth / 2f, 1000 - effectiveViewportWidth / 2f);
-		camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f, 1000 - effectiveViewportHeight / 2f);
+		camera.position.x = MathUtils.clamp(camera.position.x, effectiveViewportWidth / 2f, maxPoint - effectiveViewportWidth / 2f);
+		camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f, maxPoint - effectiveViewportHeight / 2f);
 	}
 }
