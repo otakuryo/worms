@@ -48,8 +48,8 @@ public class 	PolygonClipping extends ApplicationAdapter {
         rotationSpeed = 0.5f;
 		
 		List<float[]> verts = new ArrayList<float[]>();
-		float[] points = {100,10,-14,12f,9,-11f,60,-10,-10};
-		float[] pointsb = {102,682,590,681,589,644,596,615,602,596,588,576,569,572,573,547,588,498,579,470,569,429,533,391,517,369,476,321,445,316,416,285,410,260,374,264,357,244,325,239,282,246,263,261,231,284,217,302,216,319,221,339,184,393,171,404,159,385,110,395,99,415,79,444,92,507,104,562,114,592,90,628};
+        float[] points = {107.2f,1.2f,176.2f,1.8f,184f,15.6f,169.3f,28.5f,173.5f,33.9f,171.7f,39f,178.6f,44.4f,190f,35.4f,199.3f,34.5f,200.8f,41.7f,180.7f,54.3f,165.7f,54f,167.5f,60.9f,172.6f,69f,162.7f,75.9f,138.4f,80.1f,131.2f,77.1f,128.2f,81f,120.1f,74.1f,121.3f,55.5f,118.6f,45.3f,107.2f,45.3f,105.4f,31.2f,107.8f,24.6f,101.5f,12.3f};
+		float[] pointsb = {14.8f,0.8f,60.8f,1.2f,66f,10.4f,56.2f,19f,59f,22.6f,57.8f,26f,62.4f,29.6f,70f,23.6f,76.2f,23f,77.2f,27.8f,63.8f,36.2f,53.8f,36f,55f,40.6f,58.4f,46f,51.8f,50.6f,35.6f,53.4f,30.8f,51.4f,28.8f,54f,23.4f,49.4f,24.2f,37f,22.4f,30.2f,14.8f,30.2f,13.6f,20.8f,15.2f,16.4f,11f,8.2f};
         //float[] pointsb = {-60,-10,-60,-40f,60,-40f,60,-10};
 		verts.add(points);
 		verts.add(pointsb);
@@ -107,8 +107,8 @@ public class 	PolygonClipping extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = 30f;
-        camera.viewportHeight = 30f * height/width;
+        camera.viewportWidth = 100f;
+        camera.viewportHeight = 100f * height/width;
         camera.update();
     }
 
@@ -205,6 +205,8 @@ public class 	PolygonClipping extends ApplicationAdapter {
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			camera.translate(0, 3, 0);
 		}
+
+		//A tener en cuenta que si se rota, no se rota las direcciones de teclado XD
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			camera.rotate(-rotationSpeed, 0, 0, 1);
 		}
@@ -213,7 +215,7 @@ public class 	PolygonClipping extends ApplicationAdapter {
 		}
 
 		//limite de zoom de la camara :)
-		camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 500/camera.viewportWidth);
+		camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 230/camera.viewportWidth);
 
 		float effectiveViewportWidth = camera.viewportWidth * camera.zoom;
 		float effectiveViewportHeight = camera.viewportHeight * camera.zoom;
