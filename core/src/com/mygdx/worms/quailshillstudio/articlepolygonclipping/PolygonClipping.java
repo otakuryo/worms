@@ -17,6 +17,7 @@ import com.mygdx.worms.quailshillstudio.polygonClippingUtils.UserData;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class 	PolygonClipping extends ApplicationAdapter {
@@ -35,6 +36,9 @@ public class 	PolygonClipping extends ApplicationAdapter {
 
     //maxPoint es el punto maximo de recorrido en la pantalla en el eje x,y
     private int maxPoint = 260;
+
+    //tiempo
+    float totalTime = 5 * 60;
 
 	@Override
 	public void create () {
@@ -86,7 +90,8 @@ public class 	PolygonClipping extends ApplicationAdapter {
 			Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 			createBall(type, new Vector2(box2Dpos.x, box2Dpos.y));
 		}
-		
+
+		//en esta parte eliminamos parte del mapa si es que colisiona
 		for (int i = 0; i < world.getBodyCount(); i++) {
 			Array<Body> bodies = new Array<Body>();
 			world.getBodies(bodies );
@@ -97,13 +102,33 @@ public class 	PolygonClipping extends ApplicationAdapter {
 					bodies.removeIndex(i);
 				}
 			}
+			//Lo anyadimos a la cola de borrado
+            if (data != null && data.getType() == UserData.BOMB) {
+                if (data.isFlaggedForDelete) {
+                    world.destroyBody(bodies.get(i));
+                    bodies.get(i).setUserData(null);
+                    //bodies.removeIndex(i);
+                }
+            }
 		}
 		
 		if(mustCreate)
 			createGround();
 
+		tiempo();
 		box2dTimeStep(Gdx.graphics.getDeltaTime());
 	}
+
+	void tiempo(){
+        float deltaTime = Gdx.graphics.getDeltaTime(); //You might prefer getRawDeltaTime()
+
+        totalTime -= deltaTime; //if counting down
+
+        int minutes = ((int)totalTime) / 60;
+        int seconds = ((int)totalTime) % 60;
+
+        System.out.println("time: "+minutes+":"+seconds);
+    }
 
     @Override
     public void resize(int width, int height) {

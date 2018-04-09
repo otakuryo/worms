@@ -7,9 +7,13 @@ public class UserData {
 	public int type;
 	public boolean mustDestroy;
 	public boolean destroyed;
-	
+
+	public int count = 0;
+	public boolean isFlaggedForDelete=false;
+
 	public UserData(int type) {
 		this.type = type;
+		count=0;
 	}
 
 	public int getType() {
