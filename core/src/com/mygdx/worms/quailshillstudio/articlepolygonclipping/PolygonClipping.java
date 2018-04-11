@@ -3,9 +3,13 @@ package com.mygdx.worms.quailshillstudio.articlepolygonclipping;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.particles.values.MeshSpawnShapeValue;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -16,12 +20,15 @@ import com.mygdx.worms.quailshillstudio.polygonClippingUtils.PolygonBox2DShape;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.UserData;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
 
+import java.awt.geom.RectangularShape;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class 	PolygonClipping extends ApplicationAdapter {
 	SpriteBatch batch;
+	Texture guns;
+	ShapeRenderer shapeRenderer;
 	World world;
 	Box2DDebugRenderer renderer;
 	OrthographicCamera camera;
@@ -40,15 +47,22 @@ public class 	PolygonClipping extends ApplicationAdapter {
     //tiempo
     float totalTime = 5 * 60;
 
+    //worms
+    Body worm1;
+
 	@Override
 	public void create () {
 	    float relation=1f;
+
+	    //dibujamos imagen
 		batch = new SpriteBatch();
+		guns = new Texture("hud.png");
 		world = new World(new Vector2(0, -9.81f), false);
 		world.setContactListener(new WorldCollisions(this));
 		renderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera(Gdx.graphics.getWidth()/relation,Gdx.graphics.getHeight()/relation);
 
+		shapeRenderer = new ShapeRenderer();
         rotationSpeed = 0.5f;
 		
 		List<float[]> verts = new ArrayList<float[]>();
@@ -62,8 +76,8 @@ public class 	PolygonClipping extends ApplicationAdapter {
 		mustCreate = true;
 		
 		createBall(UserData.BALL, new Vector2(0,0));
+        worm1 = createWorm(UserData.WORM, new Vector2(20, 40));
         //createBall(UserData.BOMB, new Vector2(10,30));
-        System.out.println("->"+batch.getColor().toString());
 	}
 
 	@Override
@@ -115,9 +129,20 @@ public class 	PolygonClipping extends ApplicationAdapter {
 		if(mustCreate)
 			createGround();
 
-		tiempo();
+		//tiempo();
 		box2dTimeStep(Gdx.graphics.getDeltaTime());
-	}
+
+		//Dibujamos el HUD
+        hudBase();
+
+
+
+    }
+	void hudBase(){
+        batch.begin();
+        batch.draw(guns,((camera.viewportWidth*13)/2)-(guns.getWidth()/2), (camera.viewportHeight*11));
+        batch.end();
+    }
 
 	void tiempo(){
         float deltaTime = Gdx.graphics.getDeltaTime(); //You might prefer getRawDeltaTime()
@@ -201,6 +226,28 @@ public class 	PolygonClipping extends ApplicationAdapter {
 		
 		return ball;
 	}
+    public Body createWorm(int type, Vector2 position) {
+        BodyDef defBall = new BodyDef();
+        defBall.type = BodyDef.BodyType.DynamicBody;
+        defBall.position.set(position);
+        Body ball = world.createBody(defBall);
+        ball.setUserData(new UserData(type));
+
+        FixtureDef fixDefBall = new FixtureDef();
+        fixDefBall.density = .25f;
+        fixDefBall.restitution = .25f;
+        fixDefBall.friction=1f;
+        PolygonShape tri = new PolygonShape();
+        tri.setAsBox(1,1);
+        //CircleShape tri = new CircleShape();
+        //tri.setRadius(1);
+
+        fixDefBall.shape = tri;
+        ball.createFixture(fixDefBall);
+        tri.dispose();
+
+        return ball;
+    }
 	
 	private void box2dTimeStep(float deltaTime) {
 		float delta = Math.min(deltaTime, 0.25f);
@@ -212,10 +259,12 @@ public class 	PolygonClipping extends ApplicationAdapter {
 	}
 
 	private void handleInput() {
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+
+		//movimiento de la camara
+		if (Gdx.input.isKeyPressed(Input.Keys.U)) {
 			camera.zoom += 0.02;
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.J)) {
 			camera.zoom -= 0.02;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -231,11 +280,60 @@ public class 	PolygonClipping extends ApplicationAdapter {
 			camera.translate(0, 3, 0);
 		}
 
-		//A tener en cuenta que si se rota, no se rota las direcciones de teclado XD
+		//Movimiento del personaje
+		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+			System.out.printf("Space - salto");
+		}
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+
+		}
+		//salto del player,
+		if (Gdx.input.isKeyJustPressed(Input.Keys.W)){
+			float xx = worm1.getPosition().x;
+			float yy = worm1.getPosition().y;
+			if (yy<yy+1){
+				worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
+				worm1.applyForceToCenter(0, 320f, true);
+				System.out.println("Grade up"+worm1.getLinearVelocity().x);
+			}
+		}
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            System.out.println("Grade up");
+        }
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+			worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
+			worm1.applyForceToCenter(-20f, 0f, true);
+			System.out.println("A");
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+			worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
+			worm1.applyForceToCenter(20f, 0f, true);
+			System.out.println("D");
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
+			System.out.println("Arm 1");
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
+			System.out.println("Arm 2");
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.NUM_3)) {
+			System.out.println("Arm 3");
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.NUM_4)) {
+			System.out.println("Arm 4");
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.NUM_5)) {
+			System.out.println("Arm 5");
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.NUM_6)) {
+			System.out.println("Arm 6");
+		}
+
+		//A tener en cuenta que si se rota, no se rota las direcciones de teclado XD
+		if (Gdx.input.isKeyPressed(Input.Keys.I)) {
 			camera.rotate(-rotationSpeed, 0, 0, 1);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.K)) {
 			camera.rotate(rotationSpeed, 0, 0, 1);
 		}
 
