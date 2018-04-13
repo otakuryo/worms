@@ -3,12 +3,10 @@ package com.mygdx.worms.quailshillstudio.articlepolygonclipping;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.particles.values.MeshSpawnShapeValue;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -17,12 +15,10 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.GroundFixture;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.PolygonBox2DShape;
-import com.mygdx.worms.quailshillstudio.polygonClippingUtils.UserData;
+import com.mygdx.worms.quailshillstudio.model.UserData;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
 
-import java.awt.geom.RectangularShape;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class 	PolygonClipping extends ApplicationAdapter {
@@ -48,7 +44,8 @@ public class 	PolygonClipping extends ApplicationAdapter {
     float totalTime = 5 * 60;
 
     //worms
-    Body worm1;
+    Body worm1,worm2;
+    ArrayList<UserData> us = new ArrayList<UserData>();
 
 	@Override
 	public void create () {
@@ -75,8 +72,12 @@ public class 	PolygonClipping extends ApplicationAdapter {
 		polyVerts.add(grFix);
 		mustCreate = true;
 		
-		createBall(UserData.BALL, new Vector2(0,0));
-        worm1 = createWorm(UserData.WORM, new Vector2(20, 40));
+		UserData.createBall(UserData.BALL, new Vector2(0,0),world);
+		us.add(new UserData());
+        worm1 = us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world);
+
+        us.add(new UserData());
+		worm2 = us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
         //createBall(UserData.BOMB, new Vector2(10,30));
 	}
 
@@ -84,7 +85,7 @@ public class 	PolygonClipping extends ApplicationAdapter {
 	public void render () {
 
 	    //movimiento de camera
-        handleInput();
+        handleInput(1);
         camera.update();
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -102,13 +103,13 @@ public class 	PolygonClipping extends ApplicationAdapter {
 				type = UserData.BOMB;
 			}
 			Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-			createBall(type, new Vector2(box2Dpos.x, box2Dpos.y));
+			UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
 		}
 
 		//en esta parte eliminamos parte del mapa si es que colisiona
 		for (int i = 0; i < world.getBodyCount(); i++) {
 			Array<Body> bodies = new Array<Body>();
-			world.getBodies(bodies );
+			world.getBodies(bodies);
 			UserData data = ((UserData) bodies.get(i).getUserData());
 			if (data != null && data.getType() == UserData.GROUND) {
 				if ((data.mustDestroy || mustCreate) && !data.destroyed) {
@@ -207,48 +208,6 @@ public class 	PolygonClipping extends ApplicationAdapter {
 		polyVerts.clear();
 	}
 	
-	public Body createBall(int type, Vector2 position) {
-		BodyDef defBall = new BodyDef();
-		defBall.type = BodyDef.BodyType.DynamicBody;
-		defBall.position.set(position);
-		Body ball = world.createBody(defBall);
-		ball.setUserData(new UserData(type));
-
-		FixtureDef fixDefBall = new FixtureDef();
-		fixDefBall.density = .25f;
-		fixDefBall.restitution = .75f;
-		CircleShape rond = new CircleShape();
-		rond.setRadius(1);
-
-		fixDefBall.shape = rond;
-		ball.createFixture(fixDefBall);
-		rond.dispose();
-		
-		return ball;
-	}
-    public Body createWorm(int type, Vector2 position) {
-        BodyDef defBall = new BodyDef();
-        defBall.type = BodyDef.BodyType.DynamicBody;
-        defBall.position.set(position);
-        Body ball = world.createBody(defBall);
-        ball.setUserData(new UserData(type));
-
-        FixtureDef fixDefBall = new FixtureDef();
-        fixDefBall.density = .25f;
-        fixDefBall.restitution = .25f;
-        fixDefBall.friction=1f;
-        PolygonShape tri = new PolygonShape();
-        tri.setAsBox(1,1);
-        //CircleShape tri = new CircleShape();
-        //tri.setRadius(1);
-
-        fixDefBall.shape = tri;
-        ball.createFixture(fixDefBall);
-        tri.dispose();
-
-        return ball;
-    }
-	
 	private void box2dTimeStep(float deltaTime) {
 		float delta = Math.min(deltaTime, 0.25f);
 		accu += delta;
@@ -258,7 +217,7 @@ public class 	PolygonClipping extends ApplicationAdapter {
 		}
 	}
 
-	private void handleInput() {
+	private void handleInput(int player) {
 
 		//movimiento de la camara
 		if (Gdx.input.isKeyPressed(Input.Keys.U)) {
@@ -281,33 +240,25 @@ public class 	PolygonClipping extends ApplicationAdapter {
 		}
 
 		//Movimiento del personaje
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-			System.out.printf("Space - salto");
-		}
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 
 		}
 		//salto del player,
-		if (Gdx.input.isKeyJustPressed(Input.Keys.W)){
-			float xx = worm1.getPosition().x;
-			float yy = worm1.getPosition().y;
-			if (yy<yy+1){
-				worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
-				worm1.applyForceToCenter(0, 320f, true);
-				System.out.println("Grade up"+worm1.getLinearVelocity().x);
-			}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+			//UserData us = (UserData) worm1.getUserData();
+			us.get(player).wormJump();
+			System.out.println("Grade up"+worm1.getLinearVelocity().x);
 		}
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             System.out.println("Grade up");
         }
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
-			worm1.applyForceToCenter(-20f, 0f, true);
+		    us.get(player).wormLeft();
 			System.out.println("A");
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
-			worm1.applyForceToCenter(20f, 0f, true);
+            us.get(player).wormRight();
 			System.out.println("D");
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
