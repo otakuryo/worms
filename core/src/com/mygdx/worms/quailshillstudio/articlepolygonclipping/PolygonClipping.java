@@ -85,7 +85,7 @@ public class 	PolygonClipping extends ApplicationAdapter {
 	public void render () {
 
 	    //movimiento de camera
-        handleInput(1);
+        handleInput(0);
         camera.update();
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -218,6 +218,9 @@ public class 	PolygonClipping extends ApplicationAdapter {
 	}
 
 	private void handleInput(int player) {
+	    if (Gdx.input.justTouched()){
+            System.out.println(Gdx.input.getX()+" - "+Gdx.input.getY());
+        }
 
 		//movimiento de la camara
 		if (Gdx.input.isKeyPressed(Input.Keys.U)) {
@@ -241,7 +244,7 @@ public class 	PolygonClipping extends ApplicationAdapter {
 
 		//Movimiento del personaje
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-
+		    us.get(player).wormAngleUp();
 		}
 		//salto del player,
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){

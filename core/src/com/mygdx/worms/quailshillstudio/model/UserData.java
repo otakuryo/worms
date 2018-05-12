@@ -2,6 +2,7 @@ package com.mygdx.worms.quailshillstudio.model;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.GroundFixture;
 
 import javax.swing.plaf.nimbus.State;
@@ -52,28 +53,50 @@ public class UserData {
 		//CircleShape tri = new CircleShape();
 		//tri.setRadius(1);
 
-		fixDefBall.shape = tri;
+        fixDefBall.shape = tri;
 		ball.createFixture(fixDefBall);
-		tri.dispose();
+        tri.dispose();
 
 		worm1 = ball;
 		return ball;
 	}
 
 	public void wormJump(){
-		worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
-		worm1.applyForceToCenter(0, 320f, true);
+		//worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
+		//worm1.applyForceToCenter(0, 320f, true);
+
+        if (!jump) {
+            jump=true;
+            worm1.applyLinearImpulse(new Vector2(0, 8), worm1.getPosition(), true);
+
+            //delay para volver a saltar
+            Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+                    jump=false;
+                }
+            }, 2);
+        }
 	}
 	public void wormLeft(){
-		worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
-		worm1.applyForceToCenter(-20f, 0f, true);
+	    if (!jump){
+		    worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
+		    worm1.applyForceToCenter(-20f, 0f, true);
+	    }
 	}
 
 	public void wormRight() {
-		worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
-		worm1.applyForceToCenter(20f, 0f, true);
+        if (!jump) {
+            worm1.setLinearVelocity(worm1.getLinearVelocity().x, 0);
+            worm1.applyForceToCenter(20f, 0f, true);
+        }
 	}
 
+    public void wormAngleUp() {
+        if (!jump) {
+            worm1.setAngularVelocity(2);
+        }
+    }
 	public static Body createBall(int type, Vector2 position,World world) {
 		BodyDef defBall = new BodyDef();
 		defBall.type = BodyDef.BodyType.DynamicBody;
@@ -93,5 +116,7 @@ public class UserData {
 
 		return ball;
 	}
+
+
 
 }
