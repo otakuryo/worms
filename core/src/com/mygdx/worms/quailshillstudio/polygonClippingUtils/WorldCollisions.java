@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.worms.quailshillstudio.articlepolygonclipping.PolygonClipping;
 import com.mygdx.worms.quailshillstudio.model.UserData;
+import com.mygdx.worms.quailshillstudio.screens.WorldScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +14,11 @@ public class WorldCollisions implements ContactListener {
 public float circRadius = 4f;
 public int segments = (int) (circRadius*2 + circRadius/2);
 //private boolean clipped;
-private PolygonClipping game;
+private PolygonClipping games;
+private WorldScreen game;
 private boolean clipped;
 
-public WorldCollisions(PolygonClipping game){
+public WorldCollisions(WorldScreen game){
 	this.game = game;
 }
 
