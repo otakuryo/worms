@@ -17,8 +17,7 @@ public class UIFactory {
 	}
 	
 	public static InputListener createListener(final ScreenEnum dstScreen, final Object... params) {
-		return 
-				new InputListener() {
+		return new InputListener() {
 					@Override
 					public boolean touchDown(InputEvent event, float x,
 							float y, int pointer, int button) {

@@ -24,6 +24,8 @@ public enum ScreenEnum {
 	SERVER {
 		public AbstractScreen getScreen(Object... params) {
 			//return new GameScreen((Integer) params[0]);
+			System.out.println(String.valueOf(params[0]));
+			System.out.println(String.valueOf(params[1]));
 			return new ServerScreen();
 		}
 	},
