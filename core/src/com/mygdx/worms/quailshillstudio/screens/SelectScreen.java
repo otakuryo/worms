@@ -1,9 +1,6 @@
 package com.mygdx.worms.quailshillstudio.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -13,16 +10,12 @@ import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
 import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
 import com.mygdx.worms.quailshillstudio.utils.UIFactory;
-import sun.font.TextLabel;
 
 public class SelectScreen extends AbstractScreen {
 
-    String user;
-    String server;
-	
-	public SelectScreen(int type) {
+
+	public SelectScreen() {
 		super();
-		System.out.println(type);
 	}
 
 	@Override
@@ -37,7 +30,10 @@ public class SelectScreen extends AbstractScreen {
 		ImageTextButton crear = new ImageTextButton("Crear Server", uiSkin);
 		ImageTextButton volver = new ImageTextButton("Volver", uiSkin);
 
-        final Label error = new Label("Algun campo esta vacio :(",uiSkin);
+        final SelectBox team = new SelectBox(uiSkin);
+        team.setItems("Jordi Team","Fernando Team","Gerard Team");
+
+        final Label error = new Label("Rellena todos los campos :(",uiSkin);
         error.setVisible(false);
 
 		Table table = new Table();
@@ -48,6 +44,9 @@ public class SelectScreen extends AbstractScreen {
 
 		table.row().spaceTop(20);
 		table.add(txtserver);
+
+		table.row().spaceTop(20);
+		table.add(team);
 
 		table.row().spaceTop(20);
 		table.add(unirse);
@@ -65,8 +64,8 @@ public class SelectScreen extends AbstractScreen {
 
         unirse.addListener(new ClickListener() {
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
-                if (!txtusername.getText().isEmpty() && !txtserver.getText().isEmpty() && !txtusername.getText().contains("sername")){
-                    ScreenManager.getInstance().showScreen(ScreenEnum.SERVER, txtusername.getText(),txtserver.getText());
+                if (!txtusername.getText().isEmpty() && !txtserver.getText().isEmpty() && !txtusername.getText().contains("srname")){
+                    ScreenManager.getInstance().showScreen(ScreenEnum.SERVER, txtusername.getText(),txtserver.getText(),team.getSelected());
                 }else{
                     error.setVisible(true);
                 }

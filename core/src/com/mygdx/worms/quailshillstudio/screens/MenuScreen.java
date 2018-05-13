@@ -55,7 +55,7 @@ public class MenuScreen extends AbstractScreen {
         //addActor(btnExit);
 
         // Setting listeners
-        btnStart.addListener( UIFactory.createListener(ScreenEnum.SELECT,1) );
+        btnStart.addListener( UIFactory.createListener(ScreenEnum.SELECT) );
 
         btnExit.addListener(
                 new InputListener() {
