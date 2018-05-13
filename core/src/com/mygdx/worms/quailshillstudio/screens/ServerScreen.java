@@ -11,9 +11,16 @@ import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
 import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
 import com.mygdx.worms.quailshillstudio.utils.UIFactory;
+import com.mygdx.worms.serverUtils.Persona;
 import javafx.scene.control.SkinBase;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 
 public class ServerScreen extends AbstractScreen {
 
@@ -21,6 +28,9 @@ public class ServerScreen extends AbstractScreen {
     private Table table;
     private Skin uiSkin;
     private int admin;
+
+    //creando el cliente
+    Persona persona = new Persona(1);
 
 	public ServerScreen(int admin) {
 		super();
@@ -53,6 +63,7 @@ public class ServerScreen extends AbstractScreen {
 		//Image bg = new Image(txtrBg);
 		//addActor(bg);
 
+        test();
         uiSkin = new Skin(Gdx.files.internal(ConfigGen.fileSkin));
 
         final Label conectados = new Label("Sala de espera",uiSkin);
@@ -94,6 +105,23 @@ public class ServerScreen extends AbstractScreen {
 
 		*/
 	}
+	void test(){
+        ArrayList<String> addres = new ArrayList<String>();
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            for(NetworkInterface ni : Collections.list(interfaces)){
+                for(InetAddress address : Collections.list(ni.getInetAddresses()))
+                {
+                    if(address instanceof Inet4Address){
+                        addres.add(address.getHostAddress());
+                        System.out.println(address.getHostAddress());
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+    }
 
 	private void updateTable(ArrayList<String> conexiones){
         table.clearChildren();

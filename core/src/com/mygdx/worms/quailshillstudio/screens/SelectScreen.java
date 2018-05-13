@@ -10,8 +10,12 @@ import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
 import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
 import com.mygdx.worms.quailshillstudio.utils.UIFactory;
+import com.mygdx.worms.serverUtils.Persona;
 
 public class SelectScreen extends AbstractScreen {
+
+    //se crea los parametros del servidor
+    Persona persona = new Persona(1);
 
 
 	public SelectScreen() {
@@ -66,6 +70,8 @@ public class SelectScreen extends AbstractScreen {
         unirse.addListener(new ClickListener() {
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
                 if (!txtusername.getText().isEmpty() && !txtserver.getText().isEmpty() && !txtusername.getText().contains("srname")){
+                    persona.setMesageScore(txtusername.getText(),14);
+                    //persona.sendData();
                     ScreenManager.getInstance().showScreen(ScreenEnum.SERVER, txtusername.getText(),txtserver.getText(),team.getSelected(),0);
                 }else{
                     error.setVisible(true);
