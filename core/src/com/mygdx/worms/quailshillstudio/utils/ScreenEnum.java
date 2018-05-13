@@ -24,10 +24,10 @@ public enum ScreenEnum {
 	SERVER {
 		public AbstractScreen getScreen(Object... params) {
 			//return new GameScreen((Integer) params[0]);
-			System.out.println(String.valueOf(params[0]));
-			System.out.println(String.valueOf(params[1]));
-			System.out.println(String.valueOf(params[2]));
-			System.out.println(String.valueOf(params[3]));
+			System.out.println(String.valueOf(params[0])); //username
+			System.out.println(String.valueOf(params[1])); //server ip
+			System.out.println(String.valueOf(params[2])); //team
+			System.out.println(String.valueOf(params[3])); //admin?
 			return new ServerScreen((Integer)params[3]);
 		}
 	},
