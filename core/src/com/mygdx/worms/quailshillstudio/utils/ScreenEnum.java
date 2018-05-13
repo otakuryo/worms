@@ -11,7 +11,7 @@ public enum ScreenEnum {
 	
 	MAIN_MENU {
 		public AbstractScreen getScreen(Object... params) {
-			return new ServerScreen();
+			return new MenuScreen();
 		}
 	},
 	
@@ -27,7 +27,8 @@ public enum ScreenEnum {
 			System.out.println(String.valueOf(params[0]));
 			System.out.println(String.valueOf(params[1]));
 			System.out.println(String.valueOf(params[2]));
-			return new ServerScreen();
+			System.out.println(String.valueOf(params[3]));
+			return new ServerScreen((Integer)params[3]);
 		}
 	},
 

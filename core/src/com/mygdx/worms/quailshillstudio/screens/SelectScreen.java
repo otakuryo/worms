@@ -62,10 +62,11 @@ public class SelectScreen extends AbstractScreen {
 
 		addActor(table);
 
+		//comprobamos que no hay campos vacios y nos unimos al servidor
         unirse.addListener(new ClickListener() {
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
                 if (!txtusername.getText().isEmpty() && !txtserver.getText().isEmpty() && !txtusername.getText().contains("srname")){
-                    ScreenManager.getInstance().showScreen(ScreenEnum.SERVER, txtusername.getText(),txtserver.getText(),team.getSelected());
+                    ScreenManager.getInstance().showScreen(ScreenEnum.SERVER, txtusername.getText(),txtserver.getText(),team.getSelected(),0);
                 }else{
                     error.setVisible(true);
                 }
@@ -73,10 +74,11 @@ public class SelectScreen extends AbstractScreen {
             }
         });
 
+        //comprobamos que no hay campos vacios y creamos un servidor
         crear.addListener(new ClickListener() {
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
                 if (!txtusername.getText().isEmpty() && !txtserver.getText().isEmpty() && !txtusername.getText().contains("sername")){
-                    ScreenManager.getInstance().showScreen(ScreenEnum.SERVER, txtusername.getText(),txtserver.getText());
+                    ScreenManager.getInstance().showScreen(ScreenEnum.SERVER, txtusername.getText(),txtserver.getText(),team.getSelected(),1);
                 }else{
                     error.setVisible(true);
                 }
