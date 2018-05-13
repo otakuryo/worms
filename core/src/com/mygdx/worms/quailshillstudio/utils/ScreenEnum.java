@@ -2,9 +2,9 @@ package com.mygdx.worms.quailshillstudio.utils;
 
 
 import com.mygdx.worms.quailshillstudio.AdapterScreen.AbstractScreen;
-import com.mygdx.worms.quailshillstudio.screens.GameScreen;
-import com.mygdx.worms.quailshillstudio.screens.LevelSelectScreen;
+import com.mygdx.worms.quailshillstudio.screens.SelectScreen;
 import com.mygdx.worms.quailshillstudio.screens.MenuScreen;
+import com.mygdx.worms.quailshillstudio.screens.ServerScreen;
 import com.mygdx.worms.quailshillstudio.screens.WorldScreen;
 
 public enum ScreenEnum {
@@ -15,12 +15,19 @@ public enum ScreenEnum {
 		}
 	},
 	
-	LEVEL_SELECT {
+	SELECT {
 		public AbstractScreen getScreen(Object... params) {
-			return new LevelSelectScreen();
+			return new SelectScreen((Integer) params[0]);
 		}
 	},
-	
+
+	SERVER {
+		public AbstractScreen getScreen(Object... params) {
+			//return new GameScreen((Integer) params[0]);
+			return new ServerScreen();
+		}
+	},
+
 	GAME {
 		public AbstractScreen getScreen(Object... params) {
 			//return new GameScreen((Integer) params[0]);

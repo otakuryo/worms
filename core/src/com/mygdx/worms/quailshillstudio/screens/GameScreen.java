@@ -40,7 +40,7 @@ public class GameScreen extends AbstractScreen {
 		imgLevel.setPosition(getWidth() / 2, getHeight() / 2, Align.center);
 		addActor(imgLevel);
 		
-		btnBack.addListener( UIFactory.createListener( ScreenEnum.LEVEL_SELECT ) );
+		btnBack.addListener( UIFactory.createListener( ScreenEnum.SELECT ) );
 	}
 
 	@Override
