@@ -5,7 +5,15 @@ import java.net.*;
 import java.util.logging.*;
 public class Servidor {
 	static int PORT=10578;
+
+    public Servidor() {
+    }
+
     public static void main(String args[]) throws IOException {
+        iniciarServer();
+    }
+
+    public static void iniciarServer(){
         ServerSocket ss;
         System.out.print("Inicializando servidor... ");
         try {
@@ -16,7 +24,7 @@ public class Servidor {
                 Socket socket;
                 socket = ss.accept();
                 System.out.println("Nueva conexion entrante: "+socket);
-                ((ServidorHilo) new ServidorHilo(socket, idSession)).start();
+                (new ServidorHilo(socket, idSession)).start();
                 idSession++;
             }
         } catch (IOException ex) {

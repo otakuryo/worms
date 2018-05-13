@@ -1,5 +1,7 @@
 package com.mygdx.worms.serverUtils;
 
+import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
+
 import java.io.*;
 import java.net.Socket;
 public class Persona{
@@ -7,13 +9,13 @@ public class Persona{
     protected DataOutputStream dos;
     protected DataInputStream dis;
     private int id;
-    String mesage;
-    int score;
-    String IP="127.0.0.1";
-	static int PORT=10578;
+    private String mesage;
+    private int score;
+    private String IP="127.0.0.1";
     public Persona(int id) {
         this.id = id;
     }
+
     public void setMesageScore(String mesage,int score,String ipExt) {
 		this.mesage = mesage;
 		this.score=score;
@@ -25,14 +27,14 @@ public class Persona{
 		this.score=score;
 		sendData();
 	}
-    public void sendData() {
+    private void sendData() {
         try {
-        	sk = new Socket(IP, PORT);
+        	sk = new Socket(IP, ConfigGen.PORT);
             dos = new DataOutputStream(sk.getOutputStream());
             dis = new DataInputStream(sk.getInputStream());
             System.out.println(id + " envia datos");
             dos.writeUTF(score+","+mesage);
-            String respuesta="";
+            String respuesta;
             respuesta = dis.readUTF();
             System.out.println(id + " Servidor devuelve: " + respuesta);
             dis.close();

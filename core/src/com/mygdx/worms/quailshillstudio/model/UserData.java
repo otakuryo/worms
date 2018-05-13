@@ -3,31 +3,49 @@ package com.mygdx.worms.quailshillstudio.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
-import com.mygdx.worms.quailshillstudio.polygonClippingUtils.GroundFixture;
 
-import javax.swing.plaf.nimbus.State;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
-public class UserData {
+public class UserData implements Serializable {
+
+    //necesita ser serializable por que sino da un error de io
+    private static final long serialVersionUID = 1L;
+
 	public static final int GROUND = 0;
 	public static final int BOMB = 1;
 	public static final int BALL = 2;
 	public static final int WORM = 3;
+
 	public int X = 0;
 	public int Y = 0;
+	public int life = 100;
+
 	public int type;
 	public boolean mustDestroy;
 	public boolean destroyed;
-	public boolean jump = false;
-	Body worm1;
+	private boolean jump = false;
+	private Body worm1;
 
-	public int count = 0;
+	//datos del jugador
+    private String username;
+    private String userIP;
+    private String team;
+
+    public int count = 0;
 	public boolean isFlaggedForDelete=false;
 
 	public UserData(){}
-	public UserData(int type) {
+
+    public UserData(int type) {
+        this.type = type;
+        count=0;
+    }
+
+	public UserData(int type,String username,String userIP,String team) {
 		this.type = type;
+		this.username = username;
+		this.userIP = userIP;
+		this.team = team;
 		count=0;
 	}
 
@@ -117,6 +135,15 @@ public class UserData {
 		return ball;
 	}
 
+    public String getUsername() {
+        return username;
+    }
 
+    public String getUserIP() {
+        return userIP;
+    }
 
+    public String getTeam() {
+        return team;
+    }
 }

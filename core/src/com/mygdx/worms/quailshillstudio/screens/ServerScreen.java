@@ -25,7 +25,7 @@ import java.util.Enumeration;
 public class ServerScreen extends AbstractScreen {
 
 	//private Texture txtrBg;
-    private Table table;
+    private Table table,tableNet;
     private Skin uiSkin;
     private int admin;
 
@@ -40,6 +40,8 @@ public class ServerScreen extends AbstractScreen {
 
 	@Override
 	public void buildStage() {
+	    //skin de los botones
+        uiSkin = new Skin(Gdx.files.internal(ConfigGen.fileSkin));
 
 	    //datos de prueba
         final ArrayList<String> conexiones = new ArrayList<String>();
@@ -59,13 +61,15 @@ public class ServerScreen extends AbstractScreen {
         conexiones.add("Issam - Gerard Team");
 
 
-		// Adding actors
+		// Anyadimos la imagen de fondo
 		//Image bg = new Image(txtrBg);
 		//addActor(bg);
 
-        test();
-        uiSkin = new Skin(Gdx.files.internal(ConfigGen.fileSkin));
+        //Comprobamos la red y escribimos un cuadro de informacion con las ips.
+        infoNetwork();
+        //fin de informacion
 
+        //creando los datos principales
         final Label conectados = new Label("Sala de espera",uiSkin);
 
         ImageTextButton crear = new ImageTextButton("Iniciar", uiSkin);
@@ -87,40 +91,34 @@ public class ServerScreen extends AbstractScreen {
 
         volver.addListener( UIFactory.createListener( ScreenEnum.SELECT ) );
         if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, 1));
-
-        //btnLevel2.addListener( UIFactory.createListener(ScreenEnum.GAME, 2) );
-
-        /*
-		ImageButton btnBack = UIFactory.createButton(txtrBack);
-		btnBack.setPosition(getWidth() - 60f, 40f, Align.center);
-		addActor(btnBack);
-
-		ImageButton btnLevel1 = UIFactory.createButton(txtrLevel1);
-		btnLevel1.setPosition(getWidth()/2 - 60f, getHeight()/2, Align.center);
-		addActor(btnLevel1);
-
-		ImageButton btnLevel2 = UIFactory.createButton(txtrLevel2);
-		btnLevel2.setPosition(getWidth()/2 + 60f, getHeight()/2, Align.center);
-		addActor(btnLevel2);
-
-		*/
 	}
-	void test(){
-        ArrayList<String> addres = new ArrayList<String>();
+	void infoNetwork(){
+	    //creamos la cabecera
+        tableNet = new Table();
+        tableNet.setPosition(80,getHeight()-70,Align.top);
+
+        final Label network = new Label("Datos de ip",uiSkin);
+        tableNet.add(network).align(Align.left).spaceBottom(10);
+        tableNet.row();
+
+        //buscamos y añadimos los datos
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             for(NetworkInterface ni : Collections.list(interfaces)){
                 for(InetAddress address : Collections.list(ni.getInetAddresses()))
                 {
                     if(address instanceof Inet4Address){
-                        addres.add(address.getHostAddress());
-                        System.out.println(address.getHostAddress());
+                        tableNet.add(new Label("IP "+address.getHostAddress(),uiSkin)).align(Align.left);
+                        tableNet.row();
                     }
                 }
             }
         } catch (SocketException e) {
             e.printStackTrace();
         }
+
+        //añadimos a la pantalla
+        addActor(tableNet);
     }
 
 	private void updateTable(ArrayList<String> conexiones){
