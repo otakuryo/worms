@@ -1,20 +1,15 @@
 package com.mygdx.worms.quailshillstudio.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.worms.quailshillstudio.AdapterScreen.AbstractScreen;
 import com.mygdx.worms.quailshillstudio.model.UserData;
 import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
-import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
 import com.mygdx.worms.quailshillstudio.utils.UIFactory;
 import com.mygdx.worms.serverUtils.Persona;
 import com.mygdx.worms.serverUtils.Servidor;
-import javafx.scene.control.SkinBase;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -28,15 +23,14 @@ public class ServerScreen extends AbstractScreen {
     private Table table,tableNet;
     private Skin uiSkin;
     private int admin;
-    String ip;
+    //private String ip;
 
     //creando el cliente
-    Persona persona = new Persona(1);
+    private Persona persona = new Persona(1);
 
-	public ServerScreen(int admin,String ip) {
+	public ServerScreen(int admin) {
 		super();
 		this.admin=admin;
-		this.ip=ip;
 		//txtrBg   = new Texture( Gdx.files.internal("img/level_select_bg.png") );
 	}
 
@@ -45,28 +39,8 @@ public class ServerScreen extends AbstractScreen {
 	    //skin de los botones
         uiSkin = new Skin(Gdx.files.internal(ConfigGen.fileSkin));
 
-	    //datos de prueba
-        final ArrayList<String> conexiones = new ArrayList<String>();
-        conexiones.add("Agustin - Fernando Team");
-        conexiones.add("Rio - Fernando Team");
-        conexiones.add("Roger - Jordi Team");
-        conexiones.add("Issam - Gerard Team");
-        conexiones.add("Issam - Gerard Team");
-        conexiones.add("Issam - Gerard Team");
-        conexiones.add("Issam - Gerard Team");
-        conexiones.add("Issam - Gerard Team");
-        conexiones.add("Issam - Gerard Team");
-        conexiones.add("Issam - Gerard Team");
-        conexiones.add("Issam - Gerard Team");
-        conexiones.add("Issam - Gerard Team");
-        conexiones.add("Issam - Gerard Team");
-        conexiones.add("Issam - Gerard Team");
-
         final HashMap<Integer,UserData> testData = new HashMap<Integer, UserData>();
-        testData.put(0,new UserData(UserData.WORM,"agustin","127.0.0.1","Fer Team"));
-        testData.put(1,new UserData(UserData.WORM,"rio","127.0.0.1","Fer Team"));
-        testData.put(2,new UserData(UserData.WORM,"lol","127.0.0.1","Gerard Team"));
-        testData.put(3,new UserData(UserData.WORM,"Crack","127.0.0.1","Gerard Team"));
+        testData.put(0,new UserData(UserData.WORM,"SERVER","Cargando","Cargando"));
 
 
 		// Anyadimos la imagen de fondo
@@ -101,7 +75,7 @@ public class ServerScreen extends AbstractScreen {
         volver.addListener( UIFactory.createListener( ScreenEnum.SELECT ) );
         if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, 1));
 	}
-	void infoNetwork(){
+	private void infoNetwork(){
 	    //creamos la cabecera
         tableNet = new Table();
         tableNet.setPosition(80,getHeight()-70,Align.top);
@@ -130,14 +104,6 @@ public class ServerScreen extends AbstractScreen {
         addActor(tableNet);
     }
 
-	private void updateTable(ArrayList<String> conexiones){
-        table.clearChildren();
-        for (String con : conexiones) {
-            table.add(new Label(con, uiSkin));
-            table.row().spaceTop(10);
-        }
-        addActor(table);
-    }
     private void updateTableB(HashMap<Integer,UserData> player){
 	    //ID: pair.getKey(), Valor: pair.getValue()
 
@@ -147,7 +113,7 @@ public class ServerScreen extends AbstractScreen {
             Map.Entry pair = (Map.Entry) o;
             UserData ud = (UserData) pair.getValue();
 
-            table.add(new Label(ud.getUsername() + " - " + ud.getTeam()+" - "+ud.getUserIP(), uiSkin));
+            table.add(new Label(pair.getKey()+" - "+ud.getUsername() + " - " + ud.getTeam()+" - "+ud.getUserIP(), uiSkin));
             table.row().spaceTop(10);
 
             //it.remove(); // avoids a ConcurrentModificationException
@@ -155,7 +121,7 @@ public class ServerScreen extends AbstractScreen {
         addActor(table);
     }
 
-    int sec;
+    private int sec;
     @Override
     public void render(float delta) {
         super.render(delta);
