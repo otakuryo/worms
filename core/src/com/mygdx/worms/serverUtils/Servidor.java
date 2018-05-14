@@ -19,7 +19,7 @@ public class Servidor {
     }
 
     public static void iniciarServer(){
-        players.put(2,new UserData(UserData.WORM,"user","123","Team"));
+        //players.put(2,new UserData(UserData.WORM,"user","123","Team"));
         ServerSocket ss;
         System.out.print("Inicializando servidor... ");
         try {
@@ -52,6 +52,10 @@ public class Servidor {
 
     public void setPlayers(HashMap<Integer, UserData> players) {
         this.players = players;
+    }
+
+    public static void addUserToPlayers(int id,UserData usuario){
+        players.put(id,usuario);
     }
 
     /*

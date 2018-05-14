@@ -28,7 +28,7 @@ public enum ScreenEnum {
 			//System.out.println(String.valueOf(params[1])); //server ip
 			//System.out.println(String.valueOf(params[2])); //team
 			//System.out.println(String.valueOf(params[3])); //admin?
-			return new ServerScreen((Integer)params[3]);
+			return new ServerScreen((Integer)params[3],String.valueOf(params[1]));
 		}
 	},
 

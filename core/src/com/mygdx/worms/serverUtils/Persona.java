@@ -22,12 +22,13 @@ public class Persona{
 		IP=ipExt;
 		sendData();
 	}
-    public void setMesageScore(String username,String team) {
+	//cambiarlo por el paquete hashmap :)
+    public String setMesageScore(String username,String team) {
 		this.username = username;
 		this.team = team;
-		sendData();
+		return sendData();
 	}
-    private void sendData() {
+    private String sendData() {
         try {
         	sk = new Socket(IP, ConfigGen.PORT);
             dos = new DataOutputStream(sk.getOutputStream());
@@ -40,8 +41,10 @@ public class Persona{
             dis.close();
             dos.close();
             sk.close();
+            return respuesta;
 		} catch (Exception e) {
 			System.out.println("Error al enviar datos :(");
+			return "error";
 		}
     }
 }

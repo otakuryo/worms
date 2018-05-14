@@ -13,6 +13,7 @@ import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
 import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
 import com.mygdx.worms.quailshillstudio.utils.UIFactory;
 import com.mygdx.worms.serverUtils.Persona;
+import com.mygdx.worms.serverUtils.Servidor;
 import javafx.scene.control.SkinBase;
 
 import java.net.Inet4Address;
@@ -27,13 +28,15 @@ public class ServerScreen extends AbstractScreen {
     private Table table,tableNet;
     private Skin uiSkin;
     private int admin;
+    String ip;
 
     //creando el cliente
     Persona persona = new Persona(1);
 
-	public ServerScreen(int admin) {
+	public ServerScreen(int admin,String ip) {
 		super();
 		this.admin=admin;
+		this.ip=ip;
 		//txtrBg   = new Texture( Gdx.files.internal("img/level_select_bg.png") );
 	}
 
@@ -138,6 +141,8 @@ public class ServerScreen extends AbstractScreen {
     private void updateTableB(HashMap<Integer,UserData> player){
 	    //ID: pair.getKey(), Valor: pair.getValue()
 
+        table.clearChildren();
+        //player.clear();
         for (Object o : player.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
             UserData ud = (UserData) pair.getValue();
@@ -150,11 +155,23 @@ public class ServerScreen extends AbstractScreen {
         addActor(table);
     }
 
+    int sec;
     @Override
     public void render(float delta) {
         super.render(delta);
+        sec++;
+        if (sec%60==0){
+            System.out.println("Actualizando base de datos");
+            getAndUpdateData();
+            updateTableB(Servidor.getPlayers());
+        }
     }
 
+    //cambiar por el paquete hashmap :)
+    void getAndUpdateData(){
+        String lol = persona.setMesageScore("getData",ip);
+        System.out.println("->>"+lol);
+    }
     @Override
 	public void dispose() {
 		super.dispose();
