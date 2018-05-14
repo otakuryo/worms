@@ -167,15 +167,4 @@ public class ServerScreen extends AbstractScreen {
             if (temp != null) updateTableB(temp);
         }
     }
-
-    //cambiar por el paquete hashmap :)
-    void getAndUpdateData(){
-        HashMap<Integer,UserData> lol = persona.getDataServer("getData");
-        System.out.println("->>"+lol);
-    }
-    @Override
-	public void dispose() {
-		super.dispose();
-		//txtrBg.dispose();
-	}
 }

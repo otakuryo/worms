@@ -21,7 +21,7 @@ public class Servidor {
     public static void iniciarServer(){
         //players.put(2,new UserData(UserData.WORM,"user","123","Team"));
         ServerSocket ss;
-        System.out.print("Inicializando servidor... ");
+        System.out.print("S: Inicializando servidor... ");
         try {
             ss = new ServerSocket(PORT);
             System.out.println("\t[OK]");
@@ -29,7 +29,7 @@ public class Servidor {
             while (true) {
                 Socket socket;
                 socket = ss.accept();
-                System.out.println("Nueva conexion entrante: "+socket);
+                System.out.println("S: Nueva conexion entrante: "+socket);
 
                 //si el datagrama es solo un texto, leemos los datos y enviamos la informacio solicitada
                 //caso contrario creamos un servidorhilo

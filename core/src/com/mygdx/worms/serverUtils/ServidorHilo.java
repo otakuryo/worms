@@ -42,7 +42,7 @@ public class ServidorHilo extends Thread {
         try {
             accion = dis.readUTF();
             //falta editar un poco la direccion del usuario.
-            System.out.println(accion+" - "+socket.getInetAddress().toString());
+            System.out.println("s:"+accion+" - "+socket.getInetAddress().toString());
             if (accion.contains("getData")){
 
                 // Construimos el DatagramPacket para enviar la respuesta
@@ -52,20 +52,20 @@ public class ServidorHilo extends Thread {
                 oos.writeObject(Servidor.getPlayers());
                 final byte[] dataStr = baos.toByteArray();
                 //DatagramPacket respuesta = new DatagramPacket(dataStr, dataStr.length, socket.getInetAddress(), socket.getPort());
-                System.out.println("El cliente con idSesion "+this.idSessio+" pidio la lista completa... "+dataStr.length);
+                System.out.println("S: El cliente con idSesion "+this.idSessio+" pidio la lista completa... "+dataStr.length);
 
                 dos.write(dataStr);
 
                 //playersTemp = Servidor.getPlayers();
                 //dos.writeUTF("Conteo de players: "+playersTemp.size());
             }else if(accion.isEmpty()){
-                System.out.println("El cliente con idSesion "+this.idSessio+" no tiene datos :(");
-                dos.writeUTF("Datos vacios :( ");
+                System.out.println("S: El cliente con idSesion "+this.idSessio+" no tiene datos :(");
+                dos.writeUTF("S: Datos vacios :( ");
             }else {
-                dos.writeUTF("Tus datos quedaron regitrado!");
+                dos.writeUTF("S: Tus datos quedaron regitrado!");
                 String[] tokens = accion.split(",");
 				scores.put(this.idSessio, tokens[1]);
-                System.out.println("El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio);
+                System.out.println("S: El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio);
                 Servidor.addUserToPlayers(this.idSessio,new UserData(UserData.WORM,tokens[0],socket.getInetAddress().toString(),tokens[1]));
             }
         } catch (IOException ex) {
