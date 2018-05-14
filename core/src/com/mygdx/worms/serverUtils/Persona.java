@@ -70,6 +70,9 @@ public class Persona{
             return (HashMap<Integer,UserData>) oos.readObject();
 		} catch (Exception e) {
             System.out.println(e.getMessage());
+            for (StackTraceElement s: e.getStackTrace()) {
+                System.out.println(s.toString());
+            }
 			System.out.println("Error al enviar datos :(");
 			return null;
 		}
