@@ -29,7 +29,7 @@ public class SelectScreen extends AbstractScreen {
 		Skin uiSkin = new Skin(Gdx.files.internal(ConfigGen.fileSkin));
 
 		final TextField txtusername= new TextField("Username",uiSkin);
-		final TextField txtserver= new TextField("IP Server",uiSkin);
+		final TextField txtserver= new TextField("127.0.0.1",uiSkin);
 
 		ImageTextButton unirse = new ImageTextButton("Unirse", uiSkin);
 		ImageTextButton crear = new ImageTextButton("Crear Server", uiSkin);

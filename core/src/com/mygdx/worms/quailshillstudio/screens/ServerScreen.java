@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.worms.quailshillstudio.AdapterScreen.AbstractScreen;
+import com.mygdx.worms.quailshillstudio.model.UserData;
 import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
 import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
@@ -18,9 +19,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
+import java.util.*;
 
 public class ServerScreen extends AbstractScreen {
 
@@ -60,6 +59,12 @@ public class ServerScreen extends AbstractScreen {
         conexiones.add("Issam - Gerard Team");
         conexiones.add("Issam - Gerard Team");
 
+        final HashMap<Integer,UserData> testData = new HashMap<Integer, UserData>();
+        testData.put(0,new UserData(UserData.WORM,"agustin","127.0.0.1","Fer Team"));
+        testData.put(1,new UserData(UserData.WORM,"rio","127.0.0.1","Fer Team"));
+        testData.put(2,new UserData(UserData.WORM,"lol","127.0.0.1","Gerard Team"));
+        testData.put(3,new UserData(UserData.WORM,"Crack","127.0.0.1","Gerard Team"));
+
 
 		// Anyadimos la imagen de fondo
 		//Image bg = new Image(txtrBg);
@@ -81,7 +86,8 @@ public class ServerScreen extends AbstractScreen {
         table = new Table();
         table.setPosition(getWidth() / 2, getHeight()/2+50,Align.center);
 
-        updateTable(conexiones);
+        //updateTable(conexiones);
+        updateTableB(testData);
 
         crear.setPosition(getWidth()-60,40,Align.center);
         if (admin==1) addActor(crear);
@@ -129,8 +135,27 @@ public class ServerScreen extends AbstractScreen {
         }
         addActor(table);
     }
+    private void updateTableB(HashMap<Integer,UserData> player){
+	    //ID: pair.getKey(), Valor: pair.getValue()
 
-	@Override
+        for (Object o : player.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            UserData ud = (UserData) pair.getValue();
+
+            table.add(new Label(ud.getUsername() + " - " + ud.getTeam(), uiSkin));
+            table.row().spaceTop(10);
+
+            //it.remove(); // avoids a ConcurrentModificationException
+        }
+        addActor(table);
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+    }
+
+    @Override
 	public void dispose() {
 		super.dispose();
 		//txtrBg.dispose();

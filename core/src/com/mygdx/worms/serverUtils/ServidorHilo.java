@@ -1,5 +1,7 @@
 package com.mygdx.worms.serverUtils;
 
+import com.mygdx.worms.quailshillstudio.model.UserData;
+
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
@@ -11,7 +13,8 @@ public class ServidorHilo extends Thread {
     private DataInputStream dis;
     private int idSessio;
     HashMap<Integer, String> scores = new HashMap<Integer, String>();
-    
+    HashMap<Integer, UserData> playersTemp = new HashMap<Integer, UserData>();
+
     public HashMap<Integer, String> getScores() {
 		return scores;
 	}
@@ -35,17 +38,21 @@ public class ServidorHilo extends Thread {
     }
     @Override
     public void run() {
-        String accion = "";
+        String accion;
         try {
             accion = dis.readUTF();
-            if(accion.isEmpty()){
+            if (accion.contains("getData")){
+                playersTemp = Servidor.getPlayers();
+                System.out.println("El cliente con idSesion "+this.idSessio+" pidio la lista completa...");
+                dos.writeUTF("Conteo de players: "+playersTemp.size());
+            }else if(accion.isEmpty()){
                 System.out.println("El cliente con idSesion "+this.idSessio+" no tiene datos :(");
-                dos.writeUTF("Datos vacios :(");
+                dos.writeUTF("Datos vacios :( ");
             }else {
                 dos.writeUTF("Tu escore quedo regitrado!");
                 String[] tokens = accion.split(",");
 				scores.put(Integer.parseInt(tokens[0]), tokens[1]);
-                System.out.println("El cliente con idSesion "+tokens[1]+" obtuvo: "+tokens[0]+"$");
+                System.out.println("El cliente con username "+tokens[1]+" obtuvo: "+tokens[0]+", ID: "+this.idSessio);
             }
         } catch (IOException ex) {
             Logger.getLogger(ServidorHilo.class.getName()).log(Level.SEVERE, null, ex);
