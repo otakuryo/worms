@@ -9,22 +9,22 @@ public class Persona{
     protected DataOutputStream dos;
     protected DataInputStream dis;
     private int id;
-    private String mesage;
-    private int score;
+    private String username;
+    private String team;
     private String IP="127.0.0.1";
     public Persona(int id) {
         this.id = id;
     }
 
-    public void setMesageScore(String mesage,int score,String ipExt) {
-		this.mesage = mesage;
-		this.score=score;
+    public void setMesageScore(String username,String team,String ipExt) {
+		this.username = username;
+		this.team = team;
 		IP=ipExt;
 		sendData();
 	}
-    public void setMesageScore(String mesage,int score) {
-		this.mesage = mesage;
-		this.score=score;
+    public void setMesageScore(String username,String team) {
+		this.username = username;
+		this.team = team;
 		sendData();
 	}
     private void sendData() {
@@ -33,7 +33,7 @@ public class Persona{
             dos = new DataOutputStream(sk.getOutputStream());
             dis = new DataInputStream(sk.getInputStream());
             System.out.println(id + " envia datos");
-            dos.writeUTF(score+","+mesage);
+            dos.writeUTF(username+","+team);
             String respuesta;
             respuesta = dis.readUTF();
             System.out.println(id + " Servidor devuelve: " + respuesta);

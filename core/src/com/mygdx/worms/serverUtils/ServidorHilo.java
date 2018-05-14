@@ -41,6 +41,8 @@ public class ServidorHilo extends Thread {
         String accion;
         try {
             accion = dis.readUTF();
+            //falta editar un poco la direccion del usuario.
+            System.out.println(accion+" - "+socket.getInetAddress().toString()+" - "+socket.getRemoteSocketAddress().toString());
             if (accion.contains("getData")){
                 playersTemp = Servidor.getPlayers();
                 System.out.println("El cliente con idSesion "+this.idSessio+" pidio la lista completa...");
@@ -49,9 +51,9 @@ public class ServidorHilo extends Thread {
                 System.out.println("El cliente con idSesion "+this.idSessio+" no tiene datos :(");
                 dos.writeUTF("Datos vacios :( ");
             }else {
-                dos.writeUTF("Tu escore quedo regitrado!");
+                dos.writeUTF("Tus datos quedaron regitrado!");
                 String[] tokens = accion.split(",");
-				scores.put(Integer.parseInt(tokens[0]), tokens[1]);
+				scores.put(this.idSessio, tokens[1]);
                 System.out.println("El cliente con username "+tokens[1]+" obtuvo: "+tokens[0]+", ID: "+this.idSessio);
             }
         } catch (IOException ex) {
