@@ -162,14 +162,15 @@ public class ServerScreen extends AbstractScreen {
         sec++;
         if (sec%60==0){
             System.out.println("Actualizando base de datos");
-            getAndUpdateData();
-            updateTableB(Servidor.getPlayers());
+            //getAndUpdateData();
+            HashMap<Integer,UserData> temp = persona.getDataServer("getData");
+            if (temp != null) updateTableB(temp);
         }
     }
 
     //cambiar por el paquete hashmap :)
     void getAndUpdateData(){
-        String lol = persona.setMesageScore("getData",ip);
+        HashMap<Integer,UserData> lol = persona.getDataServer("getData");
         System.out.println("->>"+lol);
     }
     @Override

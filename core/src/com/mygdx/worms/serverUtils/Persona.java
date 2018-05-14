@@ -1,16 +1,19 @@
 package com.mygdx.worms.serverUtils;
 
+import com.mygdx.worms.quailshillstudio.model.UserData;
 import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.HashMap;
+
 public class Persona{
     protected Socket sk;
     protected DataOutputStream dos;
     protected DataInputStream dis;
     private int id;
-    private String username;
-    private String team;
+    private String username = "getData";
+    private String team = "none";
     private String IP="127.0.0.1";
     public Persona(int id) {
         this.id = id;
@@ -23,28 +26,44 @@ public class Persona{
 		sendData();
 	}
 	//cambiarlo por el paquete hashmap :)
-    public String setMesageScore(String username,String team) {
+    public void setMesageScore(String username,String team) {
 		this.username = username;
 		this.team = team;
-		return sendData();
 	}
-    private String sendData() {
+	public HashMap<Integer,UserData> getDataServer(String dataExt){
+        this.username = dataExt;
+        return sendData();
+    }
+    private HashMap<Integer,UserData> sendData() {
         try {
+            //enviamos los datos
         	sk = new Socket(IP, ConfigGen.PORT);
             dos = new DataOutputStream(sk.getOutputStream());
-            dis = new DataInputStream(sk.getInputStream());
-            System.out.println(id + " envia datos");
+            System.out.println(id + " envia datos "+username+team);
             dos.writeUTF(username+","+team);
-            String respuesta;
-            respuesta = dis.readUTF();
-            System.out.println(id + " Servidor devuelve: " + respuesta);
+
+            //recibimos los datos
+            dis = new DataInputStream(sk.getInputStream());
+            byte[] respuesta = new byte[dis.available()];
+            dis.readFully(respuesta);
+            //String respuesta;
+            //respuesta = dis.readUTF();
+            System.out.println(id + " Servidor devuelve: " + respuesta.length+" bytes");
+
+            final ByteArrayInputStream baos = new ByteArrayInputStream(respuesta);
+            final ObjectInputStream oos = new ObjectInputStream(baos);
+
+            //cerramos la conexion
             dis.close();
             dos.close();
             sk.close();
-            return respuesta;
+
+            //retornamos una respuesta
+            return (HashMap<Integer,UserData>) oos.readObject();
 		} catch (Exception e) {
+            System.out.println(e);
 			System.out.println("Error al enviar datos :(");
-			return "error";
+			return null;
 		}
     }
 }
