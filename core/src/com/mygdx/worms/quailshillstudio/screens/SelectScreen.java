@@ -71,7 +71,7 @@ public class SelectScreen extends AbstractScreen {
         unirse.addListener(new ClickListener() {
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
                 if (!txtusername.getText().isEmpty() && !txtserver.getText().isEmpty() && !txtusername.getText().contains("srname")){
-                    persona.setMesageScore(txtusername.getText(),team.getSelected().toString(),txtserver.getText());
+                    persona.setNewPlayer(txtusername.getText(),team.getSelected().toString(),txtserver.getText());
                     //persona.sendData();
                     ScreenManager.getInstance().showScreen(ScreenEnum.SERVER, txtusername.getText(),txtserver.getText(),team.getSelected(),0);
                 }else{
@@ -86,7 +86,7 @@ public class SelectScreen extends AbstractScreen {
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
                 if (!txtusername.getText().isEmpty() && !txtserver.getText().isEmpty() && !txtusername.getText().contains("sername")){
                     createServer();
-                    persona.setMesageScore(txtusername.getText(),team.getSelected().toString());
+                    persona.setNewPlayerAndServer(txtusername.getText(),team.getSelected().toString());
                     ScreenManager.getInstance().showScreen(ScreenEnum.SERVER, txtusername.getText(),txtserver.getText(),team.getSelected(),1);
                 }else{
                     error.setVisible(true);

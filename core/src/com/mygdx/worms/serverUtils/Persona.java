@@ -16,20 +16,22 @@ public class Persona{
     private String username = "getData";
     private String team = "none";
     private String IP="127.0.0.1";
+    private String flag = "getData";
     public Persona(int id) {
         this.id = id;
     }
 
-    public void setMesageScore(String username,String team,String ipExt) {
+    public void setNewPlayer(String username,String team,String ipExt) {
 		this.username = username;
 		this.team = team;
 		IP=ipExt;
 		sendData();
 	}
 	//cambiarlo por el paquete hashmap :)
-    public void setMesageScore(String username,String team) {
+    public void setNewPlayerAndServer(String username,String team) {
 		this.username = username;
 		this.team = team;
+		sendData();
 	}
 	public HashMap<Integer,UserData> getDataServer(String dataExt){
         this.username = dataExt;
@@ -50,14 +52,14 @@ public class Persona{
             //ObjectInputStream ois = new ObjectInputStream(is);
 
             dis = new DataInputStream(sk.getInputStream());
-            byte[] respuesta = new byte[dis.available()];
-            dis.readFully(respuesta);
+            //byte[] respuesta = new byte[dis.available()];
+            //dis.readFully(respuesta);
             //String respuesta;
 
             final ObjectInputStream oos = new ObjectInputStream(dis);
 
             //respuesta = dis.readUTF();
-            System.out.println(id + " Servidor devuelve: " + respuesta.length+" bytes");
+            System.out.println(id + " Servidor respondio... transformando ");
 
             //cerramos la conexion
             //dis.close();

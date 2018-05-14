@@ -44,7 +44,8 @@ public class ServidorHilo extends Thread {
             //falta editar un poco la direccion del usuario.
             System.out.println("s:"+accion+" - "+socket.getInetAddress().toString());
             if (accion.contains("getData")){
-
+                sendListPlayers();
+                /*
                 // Construimos el DatagramPacket para enviar la respuesta
                 //primero convertimos el array en un objeto y luego en bytes
                 final ByteArrayOutputStream baos = new ByteArrayOutputStream(2000);
@@ -58,19 +59,46 @@ public class ServidorHilo extends Thread {
 
                 //playersTemp = Servidor.getPlayers();
                 //dos.writeUTF("Conteo de players: "+playersTemp.size());
+                */
             }else if(accion.isEmpty()){
                 System.out.println("S: El cliente con idSesion "+this.idSessio+" no tiene datos :(");
                 dos.writeUTF("S: Datos vacios :( ");
             }else {
+                addPlayer(accion);
+                /*
                 dos.writeUTF("S: Tus datos quedaron regitrado!");
                 String[] tokens = accion.split(",");
 				scores.put(this.idSessio, tokens[1]);
                 System.out.println("S: El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio);
                 Servidor.addUserToPlayers(this.idSessio,new UserData(UserData.WORM,tokens[0],socket.getInetAddress().toString(),tokens[1]));
+                */
             }
         } catch (IOException ex) {
             Logger.getLogger(ServidorHilo.class.getName()).log(Level.SEVERE, null, ex);
         }
         desconnectar();
+    }
+    void addPlayer(String accion) throws IOException {
+        dos.writeUTF("S: Tus datos quedaron regitrado!");
+        String[] tokens = accion.split(",");
+        scores.put(this.idSessio, tokens[1]);
+        System.out.println("S: El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio);
+        Servidor.addUserToPlayers(this.idSessio,new UserData(UserData.WORM,tokens[0],socket.getInetAddress().toString(),tokens[1]));
+    }
+    void sendListPlayers() throws IOException {
+
+        // Construimos el DatagramPacket para enviar la respuesta
+        //primero convertimos el array en un objeto y luego en bytes
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream(2000);
+        final ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(Servidor.getPlayers());
+        final byte[] dataStr = baos.toByteArray();
+        //DatagramPacket respuesta = new DatagramPacket(dataStr, dataStr.length, socket.getInetAddress(), socket.getPort());
+        System.out.println("S: El cliente con idSesion "+this.idSessio+" pidio la lista completa... "+dataStr.length);
+
+        dos.write(dataStr);
+
+        //playersTemp = Servidor.getPlayers();
+        //dos.writeUTF("Conteo de players: "+playersTemp.size());
     }
 }

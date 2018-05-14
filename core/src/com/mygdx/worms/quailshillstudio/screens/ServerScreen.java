@@ -147,7 +147,7 @@ public class ServerScreen extends AbstractScreen {
             Map.Entry pair = (Map.Entry) o;
             UserData ud = (UserData) pair.getValue();
 
-            table.add(new Label(ud.getUsername() + " - " + ud.getTeam(), uiSkin));
+            table.add(new Label(ud.getUsername() + " - " + ud.getTeam()+" - "+ud.getUserIP(), uiSkin));
             table.row().spaceTop(10);
 
             //it.remove(); // avoids a ConcurrentModificationException
@@ -163,8 +163,12 @@ public class ServerScreen extends AbstractScreen {
         if (sec%60==0){
             System.out.println("Actualizando base de datos");
             //getAndUpdateData();
-            HashMap<Integer,UserData> temp = persona.getDataServer("getData");
-            if (temp != null) updateTableB(temp);
+            if (admin==1){
+                updateTableB(Servidor.getPlayers());
+            }else {
+                HashMap<Integer, UserData> temp = persona.getDataServer("getData");
+                if (temp != null) updateTableB(temp);
+            }
         }
     }
 }
