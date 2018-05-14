@@ -7,6 +7,7 @@ import com.mygdx.worms.quailshillstudio.AdapterScreen.AbstractScreen;
 import com.mygdx.worms.quailshillstudio.model.UserData;
 import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
+import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
 import com.mygdx.worms.quailshillstudio.utils.UIFactory;
 import com.mygdx.worms.serverUtils.Persona;
 import com.mygdx.worms.serverUtils.Servidor;
@@ -73,7 +74,7 @@ public class ServerScreen extends AbstractScreen {
         addActor(volver);
 
         volver.addListener( UIFactory.createListener( ScreenEnum.SELECT ) );
-        if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, 1));
+        if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, true));
 	}
 	private void infoNetwork(){
 	    //creamos la cabecera
@@ -113,9 +114,9 @@ public class ServerScreen extends AbstractScreen {
             Map.Entry pair = (Map.Entry) o;
             UserData ud = (UserData) pair.getValue();
 
-            table.add(new Label(pair.getKey()+" - "+ud.getUsername() + " - " + ud.getTeam()+" - "+ud.getUserIP(), uiSkin));
+            table.add(new Label(pair.getKey()+" - "+ud.getUsername() + " - " + ud.getTeam()+" - "+ud.getUserIP()+" - "+ud.comenzar, uiSkin));
             table.row().spaceTop(10);
-
+            if (ud.comenzar.contains("comenzarpartida")) ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false);
             //it.remove(); // avoids a ConcurrentModificationException
         }
         addActor(table);
@@ -132,7 +133,7 @@ public class ServerScreen extends AbstractScreen {
             if (admin==1){
                 updateTableB(Servidor.getPlayers());
             }else {
-                HashMap<Integer, UserData> temp = persona.getDataServer("getData");
+                HashMap<Integer, UserData> temp = persona.getDataServer("getData","-");
                 if (temp != null) updateTableB(temp);
             }
         }

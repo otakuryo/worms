@@ -6,6 +6,8 @@ import com.mygdx.worms.quailshillstudio.screens.SelectScreen;
 import com.mygdx.worms.quailshillstudio.screens.MenuScreen;
 import com.mygdx.worms.quailshillstudio.screens.ServerScreen;
 import com.mygdx.worms.quailshillstudio.screens.WorldScreen;
+import com.mygdx.worms.serverUtils.Persona;
+import com.mygdx.worms.serverUtils.Servidor;
 
 public enum ScreenEnum {
 	
@@ -35,6 +37,9 @@ public enum ScreenEnum {
 	GAME {
 		public AbstractScreen getScreen(Object... params) {
 			//return new GameScreen((Integer) params[0]);
+			if ((Boolean) params[0]){
+                Servidor.setStartGame();
+            }
 			return new WorldScreen();
 		}
 	};

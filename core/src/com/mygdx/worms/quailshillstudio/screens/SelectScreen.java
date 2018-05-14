@@ -86,7 +86,7 @@ public class SelectScreen extends AbstractScreen {
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
                 if (!txtusername.getText().isEmpty() && !txtserver.getText().isEmpty() && !txtusername.getText().contains("sername")){
                     createServer();
-                    persona.setNewPlayerAndServer(txtusername.getText(),team.getSelected().toString());
+                    persona.setNewPlayer(txtusername.getText(),team.getSelected().toString(),txtserver.getText());
                     ScreenManager.getInstance().showScreen(ScreenEnum.SERVER, txtusername.getText(),txtserver.getText(),team.getSelected(),1);
                 }else{
                     error.setVisible(true);

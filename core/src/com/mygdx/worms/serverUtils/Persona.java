@@ -16,7 +16,7 @@ public class Persona{
     private String username = "getData";
     private String team = "none";
     private String IP="127.0.0.1";
-    private String flag = "getData";
+    private String message = "-";
     public Persona(int id) {
         this.id = id;
     }
@@ -33,8 +33,9 @@ public class Persona{
 		this.team = team;
 		sendData();
 	}
-	public HashMap<Integer,UserData> getDataServer(String dataExt){
+	public HashMap<Integer,UserData> getDataServer(String dataExt,String message){
         this.username = dataExt;
+        this.message = message;
         return sendData();
     }
     private HashMap<Integer,UserData> sendData() {
@@ -46,7 +47,13 @@ public class Persona{
             dos.writeUTF(username+","+team);
 
             //recibimos los datos
-            InputStream is = sk.getInputStream();
+
+
+
+            //InputStream is = sk.getInputStream();
+
+
+
             //recogemos los datos, y lo transformamos en un objeto de tipo Hashmap
             //para luego añadirlo a los datos.
             //ObjectInputStream ois = new ObjectInputStream(is);

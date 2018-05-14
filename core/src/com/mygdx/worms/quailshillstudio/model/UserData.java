@@ -34,6 +34,10 @@ public class UserData implements Serializable {
     public int count = 0;
 	public boolean isFlaggedForDelete=false;
 
+	//al marcar como comenzar partida, comenzara la partida
+	//public String comenzar = "comenzarpartida";
+	public String comenzar = "-";
+
 	public UserData(){}
 
     public UserData(int type) {

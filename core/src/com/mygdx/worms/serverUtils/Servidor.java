@@ -40,22 +40,20 @@ public class Servidor {
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    void datas(Socket socket) throws IOException {
-        DataOutputStream dos;
-        DataInputStream dis;
-        dis = new DataInputStream(socket.getInputStream());
-    }
 
     public static HashMap<Integer, UserData> getPlayers() {
         return players;
     }
 
-    public void setPlayers(HashMap<Integer, UserData> players) {
-        this.players = players;
+    //public void setPlayers(HashMap<Integer, UserData> players) {this.players = players;}
+
+
+    static void addUserToPlayers(int id, UserData usuario){
+        players.put(id,usuario);
     }
 
-    public static void addUserToPlayers(int id,UserData usuario){
-        players.put(id,usuario);
+    static public void setStartGame(){
+        players.get(0).comenzar = "comenzarpartida";
     }
 
     /*
