@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
 import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
 
-public class MyGdxGame extends Game {
+public class MainGame extends Game {
 	
 	@Override
 	public void create () {
