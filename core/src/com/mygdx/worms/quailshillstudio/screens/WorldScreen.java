@@ -212,7 +212,7 @@ public class WorldScreen  extends AbstractScreen {
 
     private void handleInput(int player) {
         if (Gdx.input.justTouched()){
-            System.out.println(Gdx.input.getX()+" - "+Gdx.input.getY());
+            //System.out.println(Gdx.input.getX()+" - "+Gdx.input.getY());
         }
 
         //movimiento de la camara
@@ -243,7 +243,7 @@ public class WorldScreen  extends AbstractScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
             //UserData us = (UserData) worm1.getUserData();
             wUS.get(player).wormJump();
-            System.out.println("Grade up");
+            //System.out.println("Grade up");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
@@ -251,11 +251,11 @@ public class WorldScreen  extends AbstractScreen {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             wUS.get(player).wormLeft();
-            System.out.println("A");
+            //System.out.println("A");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             wUS.get(player).wormRight();
-            System.out.println("D");
+            //System.out.println("D");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
             System.out.println("Arm 1");
@@ -297,7 +297,9 @@ public class WorldScreen  extends AbstractScreen {
 
     void enviarDatos(int player){
         //modificamos userdata y lo enviamos :)
-        //us.get(player).position;
+        HashMap<Integer,UserData> server = new HashMap<Integer, UserData>();
+        server.put(player,wUS.get(player));
+        //wUS.get(player);
     }
 
     @Override

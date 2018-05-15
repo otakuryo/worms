@@ -13,25 +13,31 @@ public class UserData implements Serializable {
     //necesita ser serializable por que sino da un error de io
     private static final long serialVersionUID = 1L;
 
+    //1
 	public static final int GROUND = 0;
 	public static final int BOMB = 1;
 	public static final int BALL = 2;
 	public static final int WORM = 3;
 
+	//2 3 4
 	public Vector2 position;
 	public int life = 100;
 
+	//5 6 7
 	public int type;
 	public boolean mustDestroy;
 	public boolean destroyed;
 	private boolean jump = false;
 	private Body worm1;
 
+	//8
 	//datos del jugador
     private String username;
     private String userIP;
     private String team;
+    private String id;
 
+    //9 10
     public int count = 0;
 	public boolean isFlaggedForDelete=false;
 
@@ -39,9 +45,12 @@ public class UserData implements Serializable {
 	//public String comenzar = "comenzarpartida";
 	public String comenzar = "-";
 
+    //11 12 13
 	//Donde y cuando se realizara el click del usuario :)
     private Vector3 clickUser;
     private int typeArm;
+
+    String temp = type+","+"posx"+","+"posy"+","+"life"+","+mustDestroy+","+destroyed+","+jump+","+username+","+count+","+isFlaggedForDelete+","+"posClickX"+","+"posClicky"+","+typeArm;
 
 	public UserData(){}
 
@@ -55,6 +64,7 @@ public class UserData implements Serializable {
 		this.username = username;
 		this.userIP = userIP;
 		this.team = team;
+		this.id="0";
 		count=0;
 	}
 

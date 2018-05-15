@@ -12,12 +12,8 @@ public class ServidorHilo extends Thread {
     private DataOutputStream dos;
     private DataInputStream dis;
     private int idSessio;
-    HashMap<Integer, String> scores = new HashMap<Integer, String>();
     HashMap<Integer, UserData> playersTemp = new HashMap<Integer, UserData>();
 
-    public HashMap<Integer, String> getScores() {
-		return scores;
-	}
     
     public ServidorHilo(Socket socket, int id) {
         this.socket = socket;
@@ -43,12 +39,14 @@ public class ServidorHilo extends Thread {
             accion = dis.readUTF();
             //falta editar un poco la direccion del usuario.
             System.out.println("s:"+accion+" - "+socket.getInetAddress().toString());
-            if (accion.contains("getData")){
-                sendListPlayers();
-            }else if(accion.isEmpty()){
+            if(accion.isEmpty()){
                 System.out.println("S: El cliente con idSesion "+this.idSessio+" no tiene datos :(");
                 dos.writeUTF("S: Datos vacios :( ");
-            }else {
+            }else if (accion.contains("getData")){
+                sendListPlayers();
+            }else if (accion.contains("setData")){
+                updateListPlayers(accion);
+            }else{
                 addPlayer(accion);
             }
         } catch (IOException ex) {
@@ -59,7 +57,6 @@ public class ServidorHilo extends Thread {
     void addPlayer(String accion) throws IOException {
         dos.writeUTF("S: Tus datos quedaron regitrado!");
         String[] tokens = accion.split(",");
-        scores.put(this.idSessio, tokens[1]);
         System.out.println("S: El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio);
         Servidor.addUserToPlayers(this.idSessio,new UserData(UserData.WORM,tokens[0],socket.getInetAddress().toString(),tokens[1]));
     }
@@ -78,5 +75,12 @@ public class ServidorHilo extends Thread {
 
         //playersTemp = Servidor.getPlayers();
         //dos.writeUTF("Conteo de players: "+playersTemp.size());
+    }
+    void updateListPlayers(String accion) throws IOException {
+        dos.writeUTF("S: Tus datos fueron modificados!");
+        String[] tokens = accion.split(",");
+        System.out.println("S: El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio);
+        Servidor.addUserToPlayers(this.idSessio,new UserData(UserData.WORM,tokens[0],socket.getInetAddress().toString(),tokens[1]));
+
     }
 }

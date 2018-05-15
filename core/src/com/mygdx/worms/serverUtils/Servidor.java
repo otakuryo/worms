@@ -55,8 +55,6 @@ public class Servidor {
     static public void setStartGame(){
         UserData usTemp = players.get(0);
         usTemp.setStart();
-        //usTemp.comenzar = "comenzarpartida";
-        //players.put(0,usTemp);
         //players.get(0).comenzar = "comenzarpartida";
     }
 

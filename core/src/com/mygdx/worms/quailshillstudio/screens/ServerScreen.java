@@ -133,7 +133,7 @@ public class ServerScreen extends AbstractScreen {
             if (admin==1){
                 updateTableB(Servidor.getPlayers());
             }else {
-                HashMap<Integer, UserData> temp = persona.getDataServer("getData","-");
+                HashMap<Integer, UserData> temp = persona.getDataServer("-","getData");
                 if (temp != null) updateTableB(temp);
             }
         }
