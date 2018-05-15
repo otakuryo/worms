@@ -1,6 +1,8 @@
 package com.mygdx.worms.quailshillstudio.model;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
 
@@ -16,8 +18,7 @@ public class UserData implements Serializable {
 	public static final int BALL = 2;
 	public static final int WORM = 3;
 
-	public int X = 0;
-	public int Y = 0;
+	public Vector2 position;
 	public int life = 100;
 
 	public int type;
@@ -37,6 +38,10 @@ public class UserData implements Serializable {
 	//al marcar como comenzar partida, comenzara la partida
 	//public String comenzar = "comenzarpartida";
 	public String comenzar = "-";
+
+	//Donde y cuando se realizara el click del usuario :)
+    private Vector3 clickUser;
+    private int typeArm;
 
 	public UserData(){}
 
@@ -139,15 +144,19 @@ public class UserData implements Serializable {
 		return ball;
 	}
 
-    public String getUsername() {
-        return username;
-    }
+    public String getUsername() {return username;}
 
-    public String getUserIP() {
-        return userIP;
-    }
+    public String getUserIP() {return userIP;}
 
-    public String getTeam() {
-        return team;
-    }
+    public String getTeam() {return team;}
+
+    public Vector3 getClickUser() {return clickUser;}
+
+    public void setClickUser(Vector3 clickUser) {this.clickUser = clickUser;}
+
+    public int getTypeArm() {return typeArm;}
+
+    public void setTypeArm(int typeArm) {this.typeArm = typeArm;}
+
+    public void setStart(){comenzar="comenzarpartida";}
 }

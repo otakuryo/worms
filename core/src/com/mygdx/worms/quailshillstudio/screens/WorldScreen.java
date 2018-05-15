@@ -19,6 +19,7 @@ import com.mygdx.worms.quailshillstudio.polygonClippingUtils.PolygonBox2DShape;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class WorldScreen  extends AbstractScreen {
@@ -44,8 +45,9 @@ public class WorldScreen  extends AbstractScreen {
     float totalTime = 5 * 60;
 
     //worms
-    Body worm1,worm2;
-    ArrayList<UserData> us = new ArrayList<UserData>();
+    HashMap<Integer,UserData> wUS = new HashMap<Integer, UserData>();
+    //Body worm1;
+    //ArrayList<UserData> us = new ArrayList<UserData>();
 
     void create_world(){
         float relation=1f;
@@ -71,12 +73,17 @@ public class WorldScreen  extends AbstractScreen {
         polyVerts.add(grFix);
         mustCreate = true;
 
-        UserData.createBall(UserData.BALL, new Vector2(0,0),world);
-        us.add(new UserData());
-        worm1 = us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world);
+        //UserData.createBall(UserData.BALL, new Vector2(0,0),world);
+        //forma 1
+        //us.add(new UserData());
+        //us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world);
 
-        us.add(new UserData());
-        worm2 = us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
+        //forma 2
+        wUS.put(0,new UserData());
+        wUS.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world);
+
+        //us.add(new UserData());
+        //us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
         //createBall(UserData.BOMB, new Vector2(10,30));
 
     }
@@ -101,6 +108,7 @@ public class WorldScreen  extends AbstractScreen {
             }else{
                 type = UserData.BOMB;
             }
+
             Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
         }
@@ -229,24 +237,24 @@ public class WorldScreen  extends AbstractScreen {
 
         //Movimiento del personaje
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            us.get(player).wormAngleUp();
+            wUS.get(player).wormAngleUp();
         }
         //salto del player,
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
             //UserData us = (UserData) worm1.getUserData();
-            us.get(player).wormJump();
-            System.out.println("Grade up"+worm1.getLinearVelocity().x);
+            wUS.get(player).wormJump();
+            System.out.println("Grade up");
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             System.out.println("Grade up");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            us.get(player).wormLeft();
+            wUS.get(player).wormLeft();
             System.out.println("A");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            us.get(player).wormRight();
+            wUS.get(player).wormRight();
             System.out.println("D");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
@@ -285,6 +293,11 @@ public class WorldScreen  extends AbstractScreen {
         //limita la vision del mapa a 0,0 como punto minimo, siendo 0,0 la parte inferior izquiera de la ventana
         camera.position.x = MathUtils.clamp(camera.position.x, effectiveViewportWidth / 2f, maxPoint - effectiveViewportWidth / 2f);
         camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f, maxPoint - effectiveViewportHeight / 2f);
+    }
+
+    void enviarDatos(int player){
+        //modificamos userdata y lo enviamos :)
+        //us.get(player).position;
     }
 
     @Override
