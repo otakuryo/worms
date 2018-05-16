@@ -22,16 +22,17 @@ public class UserData implements Serializable {
 	public static final int WORM = 3;
 
 	//2 3 4
-    public static float posClickX,posClickY;
-    public static float posX,posY;
+    public float posClickX,posClickY;
+    public float posX,posY;
 
 	public int life = 100;
 
 	//5 6 7
-    private static int type;
+	public int typeObj;
+	public int type;
 	public boolean mustDestroy;
 	public boolean destroyed;
-	private boolean jump = false;
+	public boolean jump = false;
 	private Body worm1;
 
 	//8
@@ -39,7 +40,7 @@ public class UserData implements Serializable {
     private String username;
     private String userIP;
     private String team;
-    private int id;
+    public int id;
 
     //9 10
     public int count = 0;
@@ -52,19 +53,19 @@ public class UserData implements Serializable {
     //11 12 13
 	//Donde y cuando se realizara el click del usuario :)
     private Vector3 clickUser;
-    private int typeArm;
+    public int typeArm;
 
     String temp = type+","+"posx"+","+"posy"+","+"life"+","+mustDestroy+","+destroyed+","+jump+","+username+","+id+","+count+","+isFlaggedForDelete+","+"posClickX"+","+"posClicky"+","+typeArm;
 
     public UserData(){}
 
     public UserData(int type) {
-        this.type = type;
+        this.typeObj = type;
         count=0;
     }
 
 	public UserData(int type,String username,String userIP,String team) {
-		this.type = type;
+		this.typeObj = type;
 		this.username = username;
 		this.userIP = userIP;
 		this.team = team;
@@ -72,12 +73,12 @@ public class UserData implements Serializable {
 	}
 
 	public int getType() {
-		return type;
+		return typeObj;
 	}
 
 	public Body createWorm(int type, Vector2 position,World world) {
 	    this.worldTemp = world;
-		this.type = type;
+		this.typeObj = type;
 		count=0;
 		BodyDef defBall = new BodyDef();
 		defBall.type = BodyDef.BodyType.DynamicBody;
@@ -143,47 +144,52 @@ public class UserData implements Serializable {
         System.out.println("->>"+posx+" -- "+posy);
         Vector3 box2Dpos = camera.unproject(new Vector3(posx, posy, 0));
         Vector2 position = new Vector2(box2Dpos.x, box2Dpos.y);
-
+		System.out.println("->> 1");
 		BodyDef defBall = new BodyDef();
 		defBall.type = BodyDef.BodyType.DynamicBody;
 		defBall.position.set(position);
 		Body ball = world.createBody(defBall);
 		ball.setUserData(new UserData(type));
+		System.out.println("->> 2");
 
 		FixtureDef fixDefBall = new FixtureDef();
 		fixDefBall.density = .25f;
 		fixDefBall.restitution = .75f;
 		CircleShape rond = new CircleShape();
 		rond.setRadius(1);
+		System.out.println("->> 3");
 
 		fixDefBall.shape = rond;
 		ball.createFixture(fixDefBall);
 		rond.dispose();
+		System.out.println("->> 4");
 
 		return ball;
 	}
 
-    public static Body createBall(OrthographicCamera camera,World world) {
-        Vector3 box2Dpos = camera.unproject(new Vector3(posClickX, posClickY, 0));
-        Vector2 position = new Vector2(box2Dpos.x, box2Dpos.y);
+    public static void searchAndCreateBall(UserData ud,OrthographicCamera camera,World world) {
+    	if (ud.posClickX>0 && ud.posClickY>0){
+			Vector3 box2Dpos = camera.unproject(new Vector3(ud.posClickX, ud.posClickY, 0));
+			Vector2 position = new Vector2(box2Dpos.x, box2Dpos.y);
 
-        BodyDef defBall = new BodyDef();
-        defBall.type = BodyDef.BodyType.DynamicBody;
-        defBall.position.set(position);
-        Body ball = world.createBody(defBall);
-        ball.setUserData(new UserData(type));
+			BodyDef defBall = new BodyDef();
+			defBall.type = BodyDef.BodyType.DynamicBody;
+			defBall.position.set(position);
+			Body ball = world.createBody(defBall);
+			ball.setUserData(new UserData(ud.typeObj));
 
-        FixtureDef fixDefBall = new FixtureDef();
-        fixDefBall.density = .25f;
-        fixDefBall.restitution = .75f;
-        CircleShape rond = new CircleShape();
-        rond.setRadius(1);
+			FixtureDef fixDefBall = new FixtureDef();
+			fixDefBall.density = .25f;
+			fixDefBall.restitution = .75f;
+			CircleShape rond = new CircleShape();
+			rond.setRadius(1);
 
-        fixDefBall.shape = rond;
-        ball.createFixture(fixDefBall);
-        rond.dispose();
-
-        return ball;
+			fixDefBall.shape = rond;
+			ball.createFixture(fixDefBall);
+			rond.dispose();
+			ud.posClickY=0;
+			ud.posClickX=0;
+    	}
     }
 
     public String getUsername() {return username;}
@@ -202,10 +208,9 @@ public class UserData implements Serializable {
 
     public void setStart(){comenzar="comenzarpartida";}
 
-    public void modUserData(int idE,String usernameE,int typeE,float posXE,float posYE,int lifeE,boolean mustDestroyE,boolean destroyedE
+    public void modUserData(int idE,int typeE,float posXE,float posYE,int lifeE,boolean mustDestroyE,boolean destroyedE
 			,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickXE,float posclickYE,int typeArmE){
 		this.id=idE;
-		this.username=usernameE;
 		this.type=typeE;
 
         this.posClickX = posClickXE;

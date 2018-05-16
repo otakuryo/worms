@@ -13,7 +13,7 @@ public enum ScreenEnum {
 	
 	MAIN_MENU {
 		public AbstractScreen getScreen(Object... params) {
-			return new MenuScreen();
+			return new WorldScreen();
 		}
 	},
 	
@@ -25,7 +25,6 @@ public enum ScreenEnum {
 
 	SERVER {
 		public AbstractScreen getScreen(Object... params) {
-			//return new GameScreen((Integer) params[0]);
 			//System.out.println(String.valueOf(params[0])); //username
 			//System.out.println(String.valueOf(params[1])); //server ip
 			//System.out.println(String.valueOf(params[2])); //team
@@ -36,7 +35,6 @@ public enum ScreenEnum {
 
 	GAME {
 		public AbstractScreen getScreen(Object... params) {
-			//return new GameScreen((Integer) params[0]);
 			if ((Boolean) params[0]){
                 Servidor.setStartGame();
             }

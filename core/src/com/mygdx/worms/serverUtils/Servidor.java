@@ -51,10 +51,14 @@ public class Servidor {
     static void addUserToPlayers(int id, UserData usuario){
         players.put(id,usuario);
     }
-    static void modPlayers(int idE,String usernameE,int typeE,float posxE,float posyE,int lifeE,boolean mustDestroyE,boolean destroyedE
-            ,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickX,float posclickY,int typeArmE){
+
+    //public void modUserData(int idE,String usernameE,int typeE,float posXE,float posYE,int lifeE,boolean mustDestroyE,boolean destroyedE
+    //			,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickXE,float posclickYE,int typeArmE){
+
+    static void modPlayers(int idE,int typeE,float posxE,float posyE,int lifeE,boolean mustDestroyE,boolean destroyedE
+            ,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickXE,float posclickYE,int typeArmE){
         UserData t = players.get(idE);
-        //t.modUserData();
+        t.modUserData(idE,typeE,posxE,posyE,lifeE,mustDestroyE,destroyedE,jumpE,countE,isFlaggedForDeleteE,posClickXE,posclickYE,typeArmE);
     }
 
     static public void setStartGame(){

@@ -78,12 +78,13 @@ public class ServidorHilo extends Thread {
     }
     private void updateListPlayers(String accion) throws IOException {
         //14 campos
-        //String temp = id+","+username+","+type+","+"posx"+","+"posy"+","+"life"+","+mustDestroy+","+destroyed+","+jump+","+count+","+isFlaggedForDelete+","+"posClickX"+","+"posClicky"+","+typeArm;
+        //id+username+type+"posx"+"posy"+"life"+mustDestroy+destroyed+jump+count+isFlaggedForDelete+"posClickX"+"posClicky"+typeArm;
+        //idE,usernameE,typeE,posxE,posyE,lifeE,mustDestroyE,destroyedE,jumpE,countE,isFlaggedForDeleteE,posClickXE,posclickYE,typeArmE
 
         dos.writeUTF("S: Los datos fueron modificados!");
         String[] tokens = accion.split(",");
-        System.out.println("S: El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio);
-        //Servidor.modPlayers();
-        Servidor.addUserToPlayers(this.idSessio,new UserData(UserData.WORM,tokens[0],socket.getInetAddress().toString(),tokens[1]));
+        System.out.println("S: El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio+" total: "+tokens.length);
+        Servidor.modPlayers(Integer.parseInt(tokens[0]),Integer.parseInt(tokens[1]),Float.parseFloat(tokens[2]),Float.parseFloat(tokens[3]),Integer.parseInt(tokens[4]),Boolean.parseBoolean(tokens[5]),Boolean.parseBoolean(tokens[6]),
+                Boolean.parseBoolean(tokens[7]),Integer.parseInt(tokens[8]),Boolean.parseBoolean(tokens[9]),Float.parseFloat(tokens[10]),Float.parseFloat(tokens[11]),Integer.parseInt(tokens[12]));
     }
 }

@@ -108,7 +108,7 @@ public class PolygonClipping extends ApplicationAdapter {
         polyVerts.add(grFix);
         mustCreate = true;
 
-        UserData.createBall(UserData.BALL, 0,0,camera,world);
+        //UserData.createBall(UserData.BALL, 0,0,camera,world);
         us.add(new UserData());
         worm1 = us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world);
 

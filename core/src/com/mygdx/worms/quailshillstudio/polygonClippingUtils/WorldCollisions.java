@@ -27,9 +27,9 @@ public void beginContact(Contact contact) {
     UserData ub= (UserData) contact.getFixtureB().getBody().getUserData();
     boolean b = ub.isFlaggedForDelete=true;
     ub.count++;
-    System.out.println("Fin de la colision..."+b+" - "+ub.count);
+    //System.out.println("Fin de la colision..."+b+" - "+ub.count);
     if (ub.count==4 && ub.getType() == UserData.BALL){
-        ub.type=UserData.BOMB;
+        ub.typeObj=UserData.BOMB;
     }
 }
 

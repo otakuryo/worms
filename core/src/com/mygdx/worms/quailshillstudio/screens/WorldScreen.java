@@ -17,6 +17,7 @@ import com.mygdx.worms.quailshillstudio.model.UserData;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.GroundFixture;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.PolygonBox2DShape;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
+import com.mygdx.worms.serverUtils.Persona;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -110,6 +111,9 @@ public class WorldScreen  extends AbstractScreen {
             }
 
             UserData.createBall(type,Gdx.input.getX(), Gdx.input.getY(),camera,world);
+            //idE,typeE,posxE,posyE,lifeE,mustDestroyE,destroyedE,jumpE,countE,isFlaggedForDeleteE,posClickXE,posclickYE,typeArmE
+            //id+","+username+","+type+","+"posx"+","+"posy"+","+"life"+","+mustDestroy+","+destroyed+","+jump+","+count+","+isFlaggedForDelete+","+"posClickX"+","+"posClicky"+","+typeArm;
+            //new Persona(0).getDataServer("0","setData");
             //Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             //UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
         }
