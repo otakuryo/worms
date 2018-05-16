@@ -1,6 +1,7 @@
 package com.mygdx.worms.quailshillstudio.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
@@ -12,6 +13,7 @@ public class UserData implements Serializable {
 
     //necesita ser serializable por que sino da un error de io
     private static final long serialVersionUID = 1L;
+    World worldTemp;
 
     //1
 	public static final int GROUND = 0;
@@ -20,11 +22,13 @@ public class UserData implements Serializable {
 	public static final int WORM = 3;
 
 	//2 3 4
-	public Vector2 position;
+    public static float posClickX,posClickY;
+    public static float posX,posY;
+
 	public int life = 100;
 
 	//5 6 7
-	public int type;
+    private static int type;
 	public boolean mustDestroy;
 	public boolean destroyed;
 	private boolean jump = false;
@@ -35,7 +39,7 @@ public class UserData implements Serializable {
     private String username;
     private String userIP;
     private String team;
-    private String id;
+    private int id;
 
     //9 10
     public int count = 0;
@@ -50,9 +54,9 @@ public class UserData implements Serializable {
     private Vector3 clickUser;
     private int typeArm;
 
-    String temp = type+","+"posx"+","+"posy"+","+"life"+","+mustDestroy+","+destroyed+","+jump+","+username+","+count+","+isFlaggedForDelete+","+"posClickX"+","+"posClicky"+","+typeArm;
+    String temp = type+","+"posx"+","+"posy"+","+"life"+","+mustDestroy+","+destroyed+","+jump+","+username+","+id+","+count+","+isFlaggedForDelete+","+"posClickX"+","+"posClicky"+","+typeArm;
 
-	public UserData(){}
+    public UserData(){}
 
     public UserData(int type) {
         this.type = type;
@@ -64,7 +68,6 @@ public class UserData implements Serializable {
 		this.username = username;
 		this.userIP = userIP;
 		this.team = team;
-		this.id="0";
 		count=0;
 	}
 
@@ -73,6 +76,7 @@ public class UserData implements Serializable {
 	}
 
 	public Body createWorm(int type, Vector2 position,World world) {
+	    this.worldTemp = world;
 		this.type = type;
 		count=0;
 		BodyDef defBall = new BodyDef();
@@ -134,7 +138,12 @@ public class UserData implements Serializable {
             worm1.setAngularVelocity(2);
         }
     }
-	public static Body createBall(int type, Vector2 position,World world) {
+    //public static Body createBall(int type, Vector2 position,World world) {
+    public static Body createBall(int type,float posx,float posy,OrthographicCamera camera,World world) {
+        System.out.println("->>"+posx+" -- "+posy);
+        Vector3 box2Dpos = camera.unproject(new Vector3(posx, posy, 0));
+        Vector2 position = new Vector2(box2Dpos.x, box2Dpos.y);
+
 		BodyDef defBall = new BodyDef();
 		defBall.type = BodyDef.BodyType.DynamicBody;
 		defBall.position.set(position);
@@ -154,6 +163,29 @@ public class UserData implements Serializable {
 		return ball;
 	}
 
+    public static Body createBall(OrthographicCamera camera,World world) {
+        Vector3 box2Dpos = camera.unproject(new Vector3(posClickX, posClickY, 0));
+        Vector2 position = new Vector2(box2Dpos.x, box2Dpos.y);
+
+        BodyDef defBall = new BodyDef();
+        defBall.type = BodyDef.BodyType.DynamicBody;
+        defBall.position.set(position);
+        Body ball = world.createBody(defBall);
+        ball.setUserData(new UserData(type));
+
+        FixtureDef fixDefBall = new FixtureDef();
+        fixDefBall.density = .25f;
+        fixDefBall.restitution = .75f;
+        CircleShape rond = new CircleShape();
+        rond.setRadius(1);
+
+        fixDefBall.shape = rond;
+        ball.createFixture(fixDefBall);
+        rond.dispose();
+
+        return ball;
+    }
+
     public String getUsername() {return username;}
 
     public String getUserIP() {return userIP;}
@@ -169,4 +201,26 @@ public class UserData implements Serializable {
     public void setTypeArm(int typeArm) {this.typeArm = typeArm;}
 
     public void setStart(){comenzar="comenzarpartida";}
+
+    public void modUserData(int idE,String usernameE,int typeE,float posXE,float posYE,int lifeE,boolean mustDestroyE,boolean destroyedE
+			,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickXE,float posclickYE,int typeArmE){
+		this.id=idE;
+		this.username=usernameE;
+		this.type=typeE;
+
+        this.posClickX = posClickXE;
+        this.posClickY = posclickYE;
+
+        this.posX = posXE;
+        this.posY = posYE;
+
+		this.life=lifeE;
+		this.mustDestroy=mustDestroyE;
+		this.destroyed=destroyedE;
+		this.jump=jumpE;
+		this.count=countE;
+		this.isFlaggedForDelete=isFlaggedForDeleteE;
+
+		this.typeArm=typeArmE;
+	}
 }

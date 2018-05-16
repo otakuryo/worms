@@ -51,6 +51,11 @@ public class Servidor {
     static void addUserToPlayers(int id, UserData usuario){
         players.put(id,usuario);
     }
+    static void modPlayers(int idE,String usernameE,int typeE,float posxE,float posyE,int lifeE,boolean mustDestroyE,boolean destroyedE
+            ,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickX,float posclickY,int typeArmE){
+        UserData t = players.get(idE);
+        //t.modUserData();
+    }
 
     static public void setStartGame(){
         UserData usTemp = players.get(0);

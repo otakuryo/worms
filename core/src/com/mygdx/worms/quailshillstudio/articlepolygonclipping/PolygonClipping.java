@@ -108,7 +108,7 @@ public class PolygonClipping extends ApplicationAdapter {
         polyVerts.add(grFix);
         mustCreate = true;
 
-        UserData.createBall(UserData.BALL, new Vector2(0,0),world);
+        UserData.createBall(UserData.BALL, 0,0,camera,world);
         us.add(new UserData());
         worm1 = us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world);
 
@@ -197,8 +197,8 @@ public class PolygonClipping extends ApplicationAdapter {
             }else{
                 type = UserData.BOMB;
             }
-            Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
+            //Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+            UserData.createBall(type, Gdx.input.getX(), Gdx.input.getY(),camera,world);
         }
 
         //en esta parte eliminamos parte del mapa si es que colisiona

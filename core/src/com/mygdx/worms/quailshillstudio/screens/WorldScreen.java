@@ -109,8 +109,9 @@ public class WorldScreen  extends AbstractScreen {
                 type = UserData.BOMB;
             }
 
-            Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
+            UserData.createBall(type,Gdx.input.getX(), Gdx.input.getY(),camera,world);
+            //Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+            //UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
         }
 
         //en esta parte eliminamos parte del mapa si es que colisiona

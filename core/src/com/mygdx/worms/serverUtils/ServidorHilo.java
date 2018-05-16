@@ -54,13 +54,13 @@ public class ServidorHilo extends Thread {
         }
         desconnectar();
     }
-    void addPlayer(String accion) throws IOException {
+    private void addPlayer(String accion) throws IOException {
         dos.writeUTF("S: Tus datos quedaron regitrado!");
         String[] tokens = accion.split(",");
         System.out.println("S: El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio);
         Servidor.addUserToPlayers(this.idSessio,new UserData(UserData.WORM,tokens[0],socket.getInetAddress().toString(),tokens[1]));
     }
-    void sendListPlayers() throws IOException {
+    private void sendListPlayers() throws IOException {
 
         // Construimos el DatagramPacket para enviar la respuesta
         //primero convertimos el array en un objeto y luego en bytes
@@ -76,11 +76,14 @@ public class ServidorHilo extends Thread {
         //playersTemp = Servidor.getPlayers();
         //dos.writeUTF("Conteo de players: "+playersTemp.size());
     }
-    void updateListPlayers(String accion) throws IOException {
-        dos.writeUTF("S: Tus datos fueron modificados!");
+    private void updateListPlayers(String accion) throws IOException {
+        //14 campos
+        //String temp = id+","+username+","+type+","+"posx"+","+"posy"+","+"life"+","+mustDestroy+","+destroyed+","+jump+","+count+","+isFlaggedForDelete+","+"posClickX"+","+"posClicky"+","+typeArm;
+
+        dos.writeUTF("S: Los datos fueron modificados!");
         String[] tokens = accion.split(",");
         System.out.println("S: El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio);
+        //Servidor.modPlayers();
         Servidor.addUserToPlayers(this.idSessio,new UserData(UserData.WORM,tokens[0],socket.getInetAddress().toString(),tokens[1]));
-
     }
 }
