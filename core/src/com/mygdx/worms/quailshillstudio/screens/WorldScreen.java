@@ -81,8 +81,11 @@ public class WorldScreen  extends AbstractScreen {
 
         //forma 2
         wUS.put(0,new UserData());
-        wUS.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world,"ryo");
+        wUS.get(0).createWorm(UserData.WORM, new Vector2(20, 35),world,"ryo");
 
+
+        wUS.put(1,new UserData());
+        wUS.get(1).createWorm(UserData.WORM, new Vector2(40, 55),world,"ariel");
         //us.add(new UserData());
         //us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
         //createBall(UserData.BOMB, new Vector2(10,30));
@@ -92,7 +95,7 @@ public class WorldScreen  extends AbstractScreen {
     void create_render(){
 
         //movimiento de camera
-        handleInput(0);
+        handleInput(1);
         camera.update();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -243,15 +246,9 @@ public class WorldScreen  extends AbstractScreen {
         }
 
         //Movimiento del personaje
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            wUS.get(player).wormAngleUp();
-        }
         //salto del player,
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-            //UserData us = (UserData) worm1.getUserData();
-            wUS.get(player).wormJump();
-            //System.out.println("Grade up");
-        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W))  wUS.get(player).wormJump();
+
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             System.out.println("Grade up");
@@ -263,6 +260,19 @@ public class WorldScreen  extends AbstractScreen {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             wUS.get(player).wormRight();
             //System.out.println("D");
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            //wUS.get(player).wormLeftUP();
+            //System.out.println("A");
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            //wUS.get(player).wormRightUP();
+            //System.out.println("D");
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            //wUS.get(player).wormAngleUp();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
             System.out.println("Arm 1");
