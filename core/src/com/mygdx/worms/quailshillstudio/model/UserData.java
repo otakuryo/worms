@@ -1,7 +1,9 @@
 package com.mygdx.worms.quailshillstudio.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
@@ -28,8 +30,8 @@ public class UserData implements Serializable {
 	public int life = 100;
 
 	//5 6 7
-	public int typeObj;
-	public int type;
+	public int typeObj; // worm
+	public int type; //bombas
 	public boolean mustDestroy;
 	public boolean destroyed;
 	public boolean jump = false;
@@ -176,14 +178,13 @@ public class UserData implements Serializable {
 			defBall.type = BodyDef.BodyType.DynamicBody;
 			defBall.position.set(position);
 			Body ball = world.createBody(defBall);
-			ball.setUserData(new UserData(ud.typeObj));
+			ball.setUserData(new UserData(ud.type));
 
 			FixtureDef fixDefBall = new FixtureDef();
 			fixDefBall.density = .25f;
 			fixDefBall.restitution = .75f;
 			CircleShape rond = new CircleShape();
 			rond.setRadius(1);
-
 			fixDefBall.shape = rond;
 			ball.createFixture(fixDefBall);
 			rond.dispose();

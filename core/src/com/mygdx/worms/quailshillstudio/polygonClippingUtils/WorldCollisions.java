@@ -27,7 +27,8 @@ public void beginContact(Contact contact) {
     UserData ub= (UserData) contact.getFixtureB().getBody().getUserData();
     boolean b = ub.isFlaggedForDelete=true;
     ub.count++;
-    //System.out.println("Fin de la colision..."+b+" - "+ub.count);
+
+	//System.out.println("Fin de la colision..."+b+" - "+ub.count);
     if (ub.count==4 && ub.getType() == UserData.BALL){
         ub.typeObj=UserData.BOMB;
     }
@@ -97,7 +98,6 @@ public void postSolve(Contact contact, ContactImpulse impulse) {
 	private void clippingGround(Body a, Body b, UserData dataA) {
 		/*if(!clipped) clipped = true;
 		else return;*/
-		
 		List<PolygonBox2DShape> totalRS = new ArrayList<PolygonBox2DShape>();
 		
 		float[] circVerts = CollisionGeometry.approxCircle(b.getPosition().x, b.getPosition().y, circRadius, segments );

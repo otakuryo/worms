@@ -2,6 +2,7 @@ package com.mygdx.worms.quailshillstudio.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -62,7 +63,6 @@ public class WorldScreen  extends AbstractScreen {
         camera = new OrthographicCamera(Gdx.graphics.getWidth()/relation,Gdx.graphics.getHeight()/relation);
 
         shapeRenderer = new ShapeRenderer();
-        rotationSpeed = 0.5f;
 
         List<float[]> verts = new ArrayList<float[]>();
         float[] points = {107.2f,1.2f,176.2f,1.8f,184f,15.6f,169.3f,28.5f,173.5f,33.9f,171.7f,39f,178.6f,44.4f,190f,35.4f,199.3f,34.5f,200.8f,41.7f,180.7f,54.3f,165.7f,54f,167.5f,60.9f,172.6f,69f,162.7f,75.9f,138.4f,80.1f,131.2f,77.1f,128.2f,81f,120.1f,74.1f,121.3f,55.5f,118.6f,45.3f,107.2f,45.3f,105.4f,31.2f,107.8f,24.6f,101.5f,12.3f};
@@ -110,10 +110,12 @@ public class WorldScreen  extends AbstractScreen {
                 type = UserData.BOMB;
             }
 
-            UserData.createBall(type,Gdx.input.getX(), Gdx.input.getY(),camera,world);
-            //idE,typeE,posxE,posyE,lifeE,mustDestroyE,destroyedE,jumpE,countE,isFlaggedForDeleteE,posClickXE,posclickYE,typeArmE
-            //id+","+username+","+type+","+"posx"+","+"posy"+","+"life"+","+mustDestroy+","+destroyed+","+jump+","+count+","+isFlaggedForDelete+","+"posClickX"+","+"posClicky"+","+typeArm;
-            //new Persona(0).getDataServer("0","setData");
+            //UserData.createBall(type,Gdx.input.getX(), Gdx.input.getY(),camera,world);
+            wUS.get(0).posClickX = Gdx.input.getX();
+            wUS.get(0).posClickY = Gdx.input.getY();
+            wUS.get(0).type = type;
+
+            UserData.searchAndCreateBall(wUS.get(0),camera,world);
             //Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             //UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
         }
@@ -331,4 +333,9 @@ public class WorldScreen  extends AbstractScreen {
         batch.dispose();
     }
 
+    void enviarDatos(int id,float posx,float posy,float posClickX,float posClicky){
+        //modificamos añdimos los parametros y lo enviamos :)
+        System.out.println("Enviando datos, ID: "+id);
+        new Persona(id).getDataServer(id+","+wUS.get(id).type+","+posx+","+posy+","+wUS.get(id).life+","+wUS.get(id).mustDestroy+","+wUS.get(id).destroyed+","+wUS.get(id).jump+","+count+","+wUS.get(id).isFlaggedForDelete+","+posClickX+","+posClicky+","+wUS.get(id).typeArm,"setData");
+    }
 }
