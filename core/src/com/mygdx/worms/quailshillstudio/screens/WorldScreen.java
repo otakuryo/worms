@@ -81,7 +81,7 @@ public class WorldScreen  extends AbstractScreen {
 
         //forma 2
         wUS.put(0,new UserData());
-        wUS.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world);
+        wUS.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world,"ryo");
 
         //us.add(new UserData());
         //us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
@@ -132,7 +132,7 @@ public class WorldScreen  extends AbstractScreen {
                 }
             }
             //Lo anyadimos a la cola de borrado
-            if (data != null && data.getType() == UserData.BOMB) {
+            if (data != null && (data.getType() == UserData.BOMB || data.getType() == UserData.WORM && data.life<0)) {
                 if (data.isFlaggedForDelete) {
                     world.destroyBody(bodies.get(i));
                     bodies.get(i).setUserData(null);

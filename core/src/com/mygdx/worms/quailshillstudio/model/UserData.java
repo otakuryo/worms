@@ -78,7 +78,8 @@ public class UserData implements Serializable {
 		return typeObj;
 	}
 
-	public Body createWorm(int type, Vector2 position,World world) {
+	public Body createWorm(int type, Vector2 position,World world,String username) {
+    	this.username=username;
 	    this.worldTemp = world;
 		this.typeObj = type;
 		count=0;

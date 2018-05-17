@@ -56,6 +56,14 @@ public void postSolve(Contact contact, ContactImpulse impulse) {
 	}else if(dataB instanceof UserData && dataB.getType() == UserData.GROUND && dataA instanceof UserData && dataA.getType() == UserData.BOMB){
 		clippingGround(b, a, dataB);
 	   }
+
+    if (dataA != null && dataA.getType() == UserData.WORM && dataA.getUsername().contains("ryo")){
+		dataA.life= dataA.life-10;
+		System.out.println("-->"+dataA.getUsername()+ " . "+dataB.getUsername()+ " . "+dataA.life);
+		if (dataA.life<1){
+			dataA.isFlaggedForDelete=true;
+		}
+	}
 	clipped = false;
 	}
 
