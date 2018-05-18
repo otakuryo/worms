@@ -179,7 +179,9 @@ public class UserData implements Serializable {
 
     public static void searchAndCreateBall(UserData ud,OrthographicCamera camera,World world) {
     	if (ud.posClickX>0 && ud.posClickY>0){
-			Vector3 box2Dpos = camera.unproject(new Vector3(ud.posClickX, ud.posClickY, 0));
+			System.out.println("-->"+ud.worm1.getPosition().x);
+			Vector3 box2Dpos = camera.unproject(new Vector3(ud.worm1.getPosition().x, ud.worm1.getPosition().y, 0));
+//			Vector3 box2Dpos = camera.unproject(new Vector3(ud.posClickX, ud.posClickY-30, 0));
 			Vector2 position = new Vector2(box2Dpos.x, box2Dpos.y);
 
 			BodyDef defBall = new BodyDef();
@@ -196,6 +198,10 @@ public class UserData implements Serializable {
 			fixDefBall.shape = rond;
 			ball.createFixture(fixDefBall);
 			rond.dispose();
+			ball.applyLinearImpulse(22,22,box2Dpos.x,box2Dpos.y,true);
+			//ball.applyLinearImpulse(22,22,box2Dpos.x,box2Dpos.y,true);
+			//ball.applyLinearImpulse(100,0,box2Dpos.x,box2Dpos.y,true);
+			//ball.applyLinearImpulse(2,6,box2Dpos.x,box2Dpos.y,true);
 			ud.posClickY=0;
 			ud.posClickX=0;
     	}
