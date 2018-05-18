@@ -338,13 +338,12 @@ public class PolygonClipping extends ApplicationAdapter {
 
 		//Movimiento del personaje
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-		    us.get(player).wormAngleUp();
+		    us.get(player).wormJump();
 		}
 		//salto del player,
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
 			//UserData us = (UserData) worm1.getUserData();
 			us.get(player).wormJump();
-			System.out.println("Grade up"+worm1.getLinearVelocity().x);
 		}
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {

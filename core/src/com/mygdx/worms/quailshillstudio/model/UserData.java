@@ -109,10 +109,11 @@ public class UserData implements Serializable {
 	public void wormJump(){
 		//worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
 		//worm1.applyForceToCenter(0, 320f, true);
+		System.out.println("Grade up"+worm1.getLinearVelocity().x);
 
         if (!jump) {
             jump=true;
-            worm1.applyLinearImpulse(new Vector2(0, 8), worm1.getPosition(), true);
+            worm1.applyLinearImpulse(new Vector2(worm1.getLinearVelocity().x, 10), worm1.getPosition(), true);
 
             //delay para volver a saltar
             Timer.schedule(new Timer.Task(){
@@ -137,11 +138,17 @@ public class UserData implements Serializable {
         }
 	}
 
-    public void wormAngleUp() {
+    public void wormAngleUpL() {
         if (!jump) {
             worm1.setAngularVelocity(2);
         }
     }
+
+	public void wormAngleUpR() {
+		if (!jump) {
+			worm1.setAngularVelocity(-2);
+		}
+	}
     //public static Body createBall(int type, Vector2 position,World world) {
     public static Body createBall(int type,float posx,float posy,OrthographicCamera camera,World world) {
         System.out.println("->>"+posx+" -- "+posy);
