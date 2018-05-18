@@ -54,6 +54,7 @@ public class WorldScreen  extends AbstractScreen {
     void create_world(){
         float relation=1f;
 
+
         //dibujamos imagen
         batch = new SpriteBatch();
         guns = new Texture("hud.png");
