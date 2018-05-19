@@ -12,12 +12,17 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.worms.quailshillstudio.AdapterScreen.AbstractScreen;
 import com.mygdx.worms.quailshillstudio.model.UserData;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.GroundFixture;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.PolygonBox2DShape;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
+import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.serverUtils.Persona;
 
 import java.util.ArrayList;
@@ -90,11 +95,9 @@ public class WorldScreen  extends AbstractScreen {
         //us.add(new UserData());
         //us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
         //createBall(UserData.BOMB, new Vector2(10,30));
-
     }
 
     void create_render(){
-
         int player = 1;
 
         //movimiento de camera
@@ -108,8 +111,16 @@ public class WorldScreen  extends AbstractScreen {
 
         //UserData.createBall(type,Gdx.input.getX(), Gdx.input.getY(),camera,world);
 
+        //comprobamos si alguien lanzo un proyectil
         wUS.get(player).searchAndCreateBall(wUS.get(player),camera,world);
 
+        //si el jugador se encuentra fuera del rango, se elimina del mapa :(
+        if (wUS.get(player).worm1.getPosition().y<0){
+            //System.out.println(wUS.get(player).worm1.getPosition().x+" - "+wUS.get(player).worm1.getPosition().y);
+            System.out.println("El jugador: "+wUS.get(player).getUsername()+" murio ahogado :(");
+            wUS.get(player).life=-10;
+            wUS.get(player).mustDestroy=true;
+        }
         //crea un objeto nuevo al pulsar
         if(Gdx.input.justTouched()){
             int type;
@@ -159,18 +170,31 @@ public class WorldScreen  extends AbstractScreen {
         hudBase();
 
         //dibuajdo de rotacion - beta, falla la rotacion :(
-        /*
+
+        //dibujando la posicion de lanzamiento + animacion
         Vector2 pos = wUS.get(player).worm1.getPosition();
         float angle = wUS.get(player).worm1.getAngle(); //if you need rotation
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLUE);
-        this.shapeRenderer.identity();
-        shapeRenderer.translate(pos.x*6, pos.y*6, 0);
+        shapeRenderer.identity();
+        shapeRenderer.translate(80, 40, 0);
         shapeRenderer.rotate(0, 0, 10, angle * 20f);
-        shapeRenderer.rect(-10, -10, 20, 20);
-        this.shapeRenderer.end();
-        */
+        shapeRenderer.rect(-10, -10, 24, 24);
+        shapeRenderer.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.identity();
+        shapeRenderer.translate(80, 40, 0);
+        shapeRenderer.rotate(0, 0, 1,angle*180f);
+        shapeRenderer.circle(20,30,10);
+        shapeRenderer.end();
+
+
+
+
+
     }
 
 

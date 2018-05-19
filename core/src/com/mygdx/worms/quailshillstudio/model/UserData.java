@@ -206,7 +206,7 @@ public class UserData implements Serializable {
 			fixDefBall.shape = rond;
 			ball.createFixture(fixDefBall);
 			rond.dispose();
-			ball.applyLinearImpulse(22,22,position.x,position.y,true);
+			ball.applyLinearImpulse(0,22,position.x,position.y,true);
 			//ball.applyLinearImpulse(22,22,box2Dpos.x,box2Dpos.y,true);
 			//ball.applyLinearImpulse(100,0,box2Dpos.x,box2Dpos.y,true);
 			//ball.applyLinearImpulse(2,6,box2Dpos.x,box2Dpos.y,true);
