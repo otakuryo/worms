@@ -35,7 +35,7 @@ public class UserData implements Serializable {
 	public boolean mustDestroy;
 	public boolean destroyed;
 	public boolean jump = false;
-	private Body worm1;
+	public Body worm1;
 
 	//8
 	//datos del jugador
@@ -76,34 +76,6 @@ public class UserData implements Serializable {
 
 	public int getType() {
 		return typeObj;
-	}
-
-	public Body createWorm(int type, Vector2 position,World world,String username) {
-    	this.username=username;
-	    this.worldTemp = world;
-		this.typeObj = type;
-		count=0;
-		BodyDef defBall = new BodyDef();
-		defBall.type = BodyDef.BodyType.DynamicBody;
-		defBall.position.set(position);
-		Body ball = world.createBody(defBall);
-		ball.setUserData(this);
-
-		FixtureDef fixDefBall = new FixtureDef();
-		fixDefBall.density = .25f;
-		fixDefBall.restitution = .25f;
-		fixDefBall.friction=1f;
-		PolygonShape tri = new PolygonShape();
-		tri.setAsBox(1,1);
-		//CircleShape tri = new CircleShape();
-		//tri.setRadius(1);
-
-        fixDefBall.shape = tri;
-		ball.createFixture(fixDefBall);
-        tri.dispose();
-
-		worm1 = ball;
-		return ball;
 	}
 
 	public void wormJump(){
@@ -176,13 +148,49 @@ public class UserData implements Serializable {
 
 		return ball;
 	}
+	public Body createWorm(int type, Vector2 position,World world,String username) {
+		this.username=username;
+		this.worldTemp = world;
+		this.typeObj = type;
+		count=0;
+		BodyDef defBall = new BodyDef();
+		defBall.type = BodyDef.BodyType.DynamicBody;
+		defBall.position.set(position);
+		Body ball = world.createBody(defBall);
+		ball.setUserData(this);
 
-    public static void searchAndCreateBall(UserData ud,OrthographicCamera camera,World world) {
+		FixtureDef fixDefBall = new FixtureDef();
+		fixDefBall.density = .25f;
+		fixDefBall.restitution = .25f;
+		fixDefBall.friction=1f;
+		PolygonShape tri = new PolygonShape();
+		tri.setAsBox(1,1);
+		//CircleShape tri = new CircleShape();
+		//tri.setRadius(1);
+
+		fixDefBall.shape = tri;
+		ball.createFixture(fixDefBall);
+		tri.dispose();
+
+		Vector2 pos = ball.getWorldCenter();
+		float angle = ball.getAngle(); //if you need rotation
+
+		ShapeRenderer shapeRenderer = new ShapeRenderer();
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.box(position.x,position.y,0,100,100,100);
+		//shapeRenderer.circle(pos.x, pos.y,tri.getRadius());
+		shapeRenderer.end();
+
+		worm1 = ball;
+		return ball;
+	}
+
+    public void searchAndCreateBall(UserData ud,OrthographicCamera camera,World world) {
+
     	if (ud.posClickX>0 && ud.posClickY>0){
-			System.out.println("-->"+ud.worm1.getPosition().x);
-			Vector3 box2Dpos = camera.unproject(new Vector3(ud.worm1.getPosition().x, ud.worm1.getPosition().y, 0));
-//			Vector3 box2Dpos = camera.unproject(new Vector3(ud.posClickX, ud.posClickY-30, 0));
-			Vector2 position = new Vector2(box2Dpos.x, box2Dpos.y);
+			//Vector3 box2Dpos = camera.unproject(new Vector3(ud.posClickX, ud.posClickY-30, 0));
+			Vector2 position = new Vector2(worm1.getPosition().x, worm1.getPosition().y+2.25f);
 
 			BodyDef defBall = new BodyDef();
 			defBall.type = BodyDef.BodyType.DynamicBody;
@@ -198,7 +206,7 @@ public class UserData implements Serializable {
 			fixDefBall.shape = rond;
 			ball.createFixture(fixDefBall);
 			rond.dispose();
-			ball.applyLinearImpulse(22,22,box2Dpos.x,box2Dpos.y,true);
+			ball.applyLinearImpulse(22,22,position.x,position.y,true);
 			//ball.applyLinearImpulse(22,22,box2Dpos.x,box2Dpos.y,true);
 			//ball.applyLinearImpulse(100,0,box2Dpos.x,box2Dpos.y,true);
 			//ball.applyLinearImpulse(2,6,box2Dpos.x,box2Dpos.y,true);

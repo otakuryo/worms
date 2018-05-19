@@ -95,14 +95,20 @@ public class WorldScreen  extends AbstractScreen {
 
     void create_render(){
 
+        int player = 1;
+
         //movimiento de camera
-        handleInput(1);
+        handleInput(player);
         camera.update();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render(world, camera.combined);
+
+        //UserData.createBall(type,Gdx.input.getX(), Gdx.input.getY(),camera,world);
+
+        wUS.get(player).searchAndCreateBall(wUS.get(player),camera,world);
 
         //crea un objeto nuevo al pulsar
         if(Gdx.input.justTouched()){
@@ -114,12 +120,10 @@ public class WorldScreen  extends AbstractScreen {
                 type = UserData.BOMB;
             }
 
-            //UserData.createBall(type,Gdx.input.getX(), Gdx.input.getY(),camera,world);
-            wUS.get(0).posClickX = Gdx.input.getX();
-            wUS.get(0).posClickY = Gdx.input.getY();
-            wUS.get(0).type = type;
+            wUS.get(player).posClickX = Gdx.input.getX();
+            wUS.get(player).posClickY = Gdx.input.getY();
+            wUS.get(player).type = type;
 
-            UserData.searchAndCreateBall(wUS.get(0),camera,world);
             //Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             //UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
         }
@@ -153,6 +157,20 @@ public class WorldScreen  extends AbstractScreen {
 
         //Dibujamos el HUD
         hudBase();
+
+        //dibuajdo de rotacion - beta, falla la rotacion :(
+        /*
+        Vector2 pos = wUS.get(player).worm1.getPosition();
+        float angle = wUS.get(player).worm1.getAngle(); //if you need rotation
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.BLUE);
+        this.shapeRenderer.identity();
+        shapeRenderer.translate(pos.x*6, pos.y*6, 0);
+        shapeRenderer.rotate(0, 0, 10, angle * 20f);
+        shapeRenderer.rect(-10, -10, 20, 20);
+        this.shapeRenderer.end();
+        */
     }
 
 
@@ -252,7 +270,7 @@ public class WorldScreen  extends AbstractScreen {
 
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            System.out.println("Grade up");
+            System.out.println("Grade down");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             wUS.get(player).wormAngleUpL();
@@ -329,6 +347,8 @@ public class WorldScreen  extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         create_render();
+
+
     }
 
     @Override

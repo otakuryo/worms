@@ -198,7 +198,7 @@ public class PolygonClipping extends ApplicationAdapter {
                 type = UserData.BOMB;
             }
             //Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            UserData.createBall(type, Gdx.input.getX(), Gdx.input.getY(),camera,world);
+			UserData.createBall(type, Gdx.input.getX(), Gdx.input.getY(),camera,world);
         }
 
         //en esta parte eliminamos parte del mapa si es que colisiona
