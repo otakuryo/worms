@@ -193,43 +193,47 @@ public class UserData implements Serializable {
 
     	if (ud.posClickX>0 && ud.posClickY>0){
 			//Vector3 box2Dpos = camera.unproject(new Vector3(ud.posClickX, ud.posClickY-30, 0));
-			float x = 0.15f;
-			float y = 10.15f;
+			float x = 2.25f;
+			float y = 0.2f;
 
 			float fx = 50f;
 			float fy = 0f;
-			float fvx = -50f/90f;
+			float fc = -50f/90f; // tramo constante de la fuerza
+			float pc = -2.25f/90f; // tramo constante de la posicion
+
+			//si damos la vuelta completa se resetea la posicion
+			if (angleArm > 315)
+				angleArm=angleArm-360;
+
+			//fuerza de impulso x, posicion proyectil x
+			if (angleArm>-45 && angleArm<=135) {
+				fx=(angleArm*fc)+25;
+				x=(angleArm*pc)+1.125f;
+			}
+
+			if (angleArm>135 && angleArm<=315) {
+				fx=((fc*(angleArm-180f))+25f)*-1f;
+				x=((pc*(angleArm-180f))+1.125f)*-1f;
+
+			}
+
+			//fuerza impulso y, posicion proyectil y
+			if (angleArm>-45 && angleArm<=45) {
+				fy=(-angleArm*fc)+25;
+				y=(-angleArm*pc)+1.125f;
+			}
+
+			if (angleArm>45 && angleArm<=225) {
+				fy=(angleArm*fc)+75;
+				y=(angleArm*pc)+3.375f;
+			}
+
+			if (angleArm>225 && angleArm<=315) {
+				fy=((fc*(angleArm-180))+75)*-1;
+				y=((pc*(angleArm-180))+3.375f)*-1;
+			}
 			System.out.println("1 y "+fy+" x "+fx);
-
-			//fuerza de impulso x
-			if (angleArm>-45 && angleArm<=135)  fx=(angleArm*fvx)+25;
-
-			if (angleArm>135 && angleArm<=315)  fx=((fvx*(angleArm-180f))+25f)*-1f;
-
-			//fuerza impulso y
-			if (angleArm>-45 && angleArm<=45)   fy=(-angleArm*fvx)+25;
-
-			if (angleArm>45 && angleArm<=225)   fy=(angleArm*fvx)+75;
-
-			if (angleArm>225 && angleArm<=315)  fy=((fvx*(angleArm-180))+75)*-1;
-
-			//posicion del proyectil x
-			if (angleArm>=-45 && angleArm<=135){
-				// sumar poco a poco
-			}
-			if (angleArm>135 && angleArm<=315){
-				// restar poco a poco
-			}
-
-			//posicion del proyectil y, fuerza del impulso y
-			if ((angleArm>=-45 && angleArm<=45)||(angleArm>=225 && angleArm<=315)){
-
-				//sumar poco a poco
-			}
-
-			if (angleArm>45 && angleArm<225){
-				//restar poco a poco
-			}
+			System.out.println("1 yy "+y+" xx "+x);
 
 			Vector2 position = new Vector2(worm1.getPosition().x+x, worm1.getPosition().y+y);
 
