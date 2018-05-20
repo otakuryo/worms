@@ -64,7 +64,7 @@ public void postSolve(Contact contact, ContactImpulse impulse) {
 		   System.out.println("-->>" + UserData.WORM + " - " + dataB.getUsername());
 	   }
     if (dataA != null && dataA.getType() == UserData.WORM && dataB.getType() == UserData.BOMB){
-		dataA.life= dataA.life-10;
+		dataA.life= dataA.life-9;
 		System.out.println("-->"+dataA.getUsername()+ " . sufrio danyos, vida restante: "+dataA.life);
 		if (dataA.life<1){
 			dataA.isFlaggedForDelete=true;

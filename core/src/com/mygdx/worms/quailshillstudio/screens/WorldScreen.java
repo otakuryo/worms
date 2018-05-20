@@ -118,18 +118,18 @@ public class WorldScreen  extends AbstractScreen {
         //si el jugador se encuentra fuera del rango, se elimina del mapa :(
         if (wUS.get(player).worm1.getPosition().y<0){
             //System.out.println(wUS.get(player).worm1.getPosition().x+" - "+wUS.get(player).worm1.getPosition().y);
-            System.out.println("El jugador: "+wUS.get(player).getUsername()+" murio ahogado :(");
+            System.out.println("El jugador: "+wUS.get(player).getUsername()+" murio ahogado :( "+wUS.get(player).life);
             wUS.get(player).life=-10;
             wUS.get(player).mustDestroy=true;
         }
         //crea un objeto nuevo al pulsar
-        if(Gdx.input.justTouched()){
+        if(Gdx.input.justTouched() && wUS.get(player).life>0){
             int type;
             count++;
             if(count %2 == 0){
-                type = UserData.BALL;
+                type = UserData.BOMB;
             }else{
-                type = UserData.BALL;
+                type = UserData.BOMB;
             }
 
             wUS.get(player).posClickX = Gdx.input.getX();
@@ -156,6 +156,7 @@ public class WorldScreen  extends AbstractScreen {
                 if (data.isFlaggedForDelete) {
                     world.destroyBody(bodies.get(i));
                     bodies.get(i).setUserData(null);
+                    System.out.println("destruido...");
                     //bodies.removeIndex(i);
                 }
             }
@@ -189,7 +190,7 @@ public class WorldScreen  extends AbstractScreen {
         shapeRenderer.identity();
         shapeRenderer.translate(80, 80, 0);
         shapeRenderer.rotate(0, 0, 1,wUS.get(player).angleArm);
-        shapeRenderer.circle(wUS.get(player).forceArm+20,wUS.get(player).forceArm+20,10);
+        shapeRenderer.circle(wUS.get(player).forceArm,wUS.get(player).forceArm,10);
         shapeRenderer.end();
 
     }
@@ -324,7 +325,7 @@ public class WorldScreen  extends AbstractScreen {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-            if (wUS.get(player).forceArm>0) {
+            if (wUS.get(player).forceArm>20) {
                 wUS.get(player).forceArm -= 1;
                 System.out.println("df: " + wUS.get(player).forceArm);
             }
@@ -406,6 +407,6 @@ public class WorldScreen  extends AbstractScreen {
     void enviarDatos(int id,float posx,float posy,float posClickX,float posClicky){
         //modificamos añdimos los parametros y lo enviamos :)
         System.out.println("Enviando datos, ID: "+id);
-        new Persona(id).getDataServer(id+","+wUS.get(id).type+","+posx+","+posy+","+wUS.get(id).life+","+wUS.get(id).mustDestroy+","+wUS.get(id).destroyed+","+wUS.get(id).jump+","+count+","+wUS.get(id).isFlaggedForDelete+","+posClickX+","+posClicky+","+wUS.get(id).typeArm,"setData");
+        new Persona(id).getDataServer(id+","+wUS.get(id).type+","+posx+","+posy+","+wUS.get(id).life+","+wUS.get(id).mustDestroy+","+wUS.get(id).destroyed+","+wUS.get(id).jump+","+count+","+wUS.get(id).isFlaggedForDelete+","+posClickX+","+posClicky+","+wUS.get(id).typeArm+","+wUS.get(id).angleArm+","+wUS.get(id).forceArm,"setData");
     }
 }

@@ -85,6 +85,6 @@ public class ServidorHilo extends Thread {
         String[] tokens = accion.split(",");
         System.out.println("S: El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio+" total: "+tokens.length);
         Servidor.modPlayers(Integer.parseInt(tokens[0]),Integer.parseInt(tokens[1]),Float.parseFloat(tokens[2]),Float.parseFloat(tokens[3]),Integer.parseInt(tokens[4]),Boolean.parseBoolean(tokens[5]),Boolean.parseBoolean(tokens[6]),
-                Boolean.parseBoolean(tokens[7]),Integer.parseInt(tokens[8]),Boolean.parseBoolean(tokens[9]),Float.parseFloat(tokens[10]),Float.parseFloat(tokens[11]),Integer.parseInt(tokens[12]));
+                Boolean.parseBoolean(tokens[7]),Integer.parseInt(tokens[8]),Boolean.parseBoolean(tokens[9]),Float.parseFloat(tokens[10]),Float.parseFloat(tokens[11]),Integer.parseInt(tokens[12]),Float.parseFloat(tokens[12]),Float.parseFloat(tokens[13]));
     }
 }
