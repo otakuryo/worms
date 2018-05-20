@@ -13,7 +13,7 @@ public enum ScreenEnum {
 	
 	MAIN_MENU {
 		public AbstractScreen getScreen(Object... params) {
-			return new WorldScreen();
+			return new MenuScreen();
 		}
 	},
 	

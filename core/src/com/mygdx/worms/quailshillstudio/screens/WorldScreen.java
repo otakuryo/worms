@@ -25,6 +25,9 @@ import com.mygdx.worms.quailshillstudio.polygonClippingUtils.GroundFixture;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.PolygonBox2DShape;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
 import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
+import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
+import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
+import com.mygdx.worms.quailshillstudio.utils.UIFactory;
 import com.mygdx.worms.serverUtils.Persona;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import javafx.scene.text.Font;
@@ -39,9 +42,12 @@ public class WorldScreen  extends AbstractScreen {
     int genW, genH;
 
     SpriteBatch batch;
-    Texture guns;
     ShapeRenderer shapeRenderer;
     BitmapFont font;
+
+    Texture help;
+    boolean showHelp;
+    FreeTypeFontGenerator generator;
     //BitmapFont font = new BitmapFont();
 
     World world;
@@ -73,7 +79,7 @@ public class WorldScreen  extends AbstractScreen {
         //font = new BitmapFont();
         //dibujamos imagen
         batch = new SpriteBatch();
-        guns = new Texture("hud.png");
+        help = new Texture("helpKeys.png");
         world = new World(new Vector2(0, -9.81f), false);
         world.setContactListener(new WorldCollisions(this));
         renderer = new Box2DDebugRenderer();
@@ -98,19 +104,20 @@ public class WorldScreen  extends AbstractScreen {
 
         //forma 2
         wUS.put(0,new UserData());
-        wUS.get(0).createWorm(UserData.WORM, new Vector2(20, 35),world,"ryo");
+        wUS.get(0).createWorm(UserData.WORM, new Vector2(115, 48),world,"Fantasma");
 
 
         wUS.put(1,new UserData());
-        wUS.get(1).createWorm(UserData.WORM, new Vector2(70, 48),world,"ariel");
+        wUS.get(1).createWorm(UserData.WORM, new Vector2(70, 48),world,"TU");
         //us.add(new UserData());
+        //wUS.get(0).createWorm(UserData.WORM, new Vector2(20, 35),world,"ryo");
         //us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
         //createBall(UserData.BOMB, new Vector2(10,30));
 
         //font.setColor(Color.WHITE);
 
         //creamos la fuente para mostrarlo
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/leadcoat.ttf"));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("font/leadcoat.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 26;
         parameter.shadowOffsetX = 2;
@@ -223,7 +230,7 @@ public class WorldScreen  extends AbstractScreen {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.valueOf("#FF4C4C"));
             shapeRenderer.identity();
-            shapeRenderer.rect(width, heigh, (-1*pLife ), 25);
+            shapeRenderer.rect(width, heigh, (-1*pLife), 25);
             shapeRenderer.end();
         }
     }
@@ -231,18 +238,19 @@ public class WorldScreen  extends AbstractScreen {
     int textspace=30;
 
     void hudBase(){
-        //dibujamos la vida del usuario :)
-        for (int i = 0; i < wUS.size(); i++) {
-            drawLifeBar(wUS.get(i).life,genH-(28*(i+2)),35);
-        }
 
         //dibujamos el nombre del usuario
-        batch.begin();
         for (int i = 0; i < wUS.size(); i++) {
-            font.draw(batch,wUS.get(i).getUsername()+i,40,genH-(textspace*(i+1)));
+            drawLifeBar(wUS.get(i).life,genH-(28*(i+2)),35);
+            batch.begin();
+            font.draw(batch,wUS.get(i).getUsername(),40,genH-(textspace*(i+1)));
+            batch.end();
         }
-        //batch.draw(guns,((camera.viewportWidth*13)/2)-(guns.getWidth()/2), (camera.viewportHeight*11));
-        batch.end();
+        if (showHelp) {
+            batch.begin();
+            batch.draw(help, ConfigGen.SCREEN_WIDTH / 5, ConfigGen.SCREEN_HEIGHT / 6);
+            batch.end();
+        }
     }
 
     void tiempo(){
@@ -333,13 +341,14 @@ public class WorldScreen  extends AbstractScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))  wUS.get(player).wormJump();
 
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            System.out.println("Grade down");
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        //problemas con la gravedad :(
+        //if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyPressed(Input.Keys.S)) wUS.get(player).wormLeft();
+        //if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyPressed(Input.Keys.S)) wUS.get(player).wormRight();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.S)) {
             wUS.get(player).wormAngleUpL();
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && !Gdx.input.isKeyPressed(Input.Keys.S)) {
             wUS.get(player).wormAngleUpR();
         }
 
@@ -369,26 +378,11 @@ public class WorldScreen  extends AbstractScreen {
                 wUS.get(player).forceArm -= 1;
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
-            System.out.println("Arm 1");
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+            showHelp = !showHelp;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
-            System.out.println("Arm 2");
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
-            System.out.println("Arm 3");
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
-            System.out.println("Arm 4");
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
-            System.out.println("Arm 5");
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) {
-            System.out.println("Arm 6");
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) {
-            System.out.println("Arm 7");
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            System.out.println("Saliendo");
         }
 
         //A tener en cuenta que si se rota, no se rota las direcciones de teclado XD
@@ -426,8 +420,6 @@ public class WorldScreen  extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         create_render();
-
-
     }
 
     @Override
@@ -443,8 +435,8 @@ public class WorldScreen  extends AbstractScreen {
     @Override
     public void dispose() {
         batch.dispose();
-
-        //generator.dispose(); // don't forget to dispose to avoid memory leaks!
+        generator.dispose();
+        shapeRenderer.dispose();
     }
 
     void enviarDatos(int id,float posx,float posy,float posClickX,float posClicky){
