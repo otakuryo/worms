@@ -202,31 +202,16 @@ public class UserData implements Serializable {
 			System.out.println("1 y "+fy+" x "+fx);
 
 			//fuerza de impulso x
-			if (angleArm>-45 && angleArm<=135){
-				// restar poco a poco
-				fx=(angleArm*fvx)+25;
-			}
-			if (angleArm>135 && angleArm<=315){
-				// restar poco a poco
-				fx=((fvx*(angleArm-180f))+25f)*-1f;
+			if (angleArm>-45 && angleArm<=135)  fx=(angleArm*fvx)+25;
 
-			}
+			if (angleArm>135 && angleArm<=315)  fx=((fvx*(angleArm-180f))+25f)*-1f;
+
 			//fuerza impulso y
-			if (angleArm>-45 && angleArm<=45){
-				// sumar poco a poco
-				fy=(-angleArm*fvx)+25;
+			if (angleArm>-45 && angleArm<=45)   fy=(-angleArm*fvx)+25;
 
-			}
+			if (angleArm>45 && angleArm<=225)   fy=(angleArm*fvx)+75;
 
-			if (angleArm>45 && angleArm<=225){
-				// restar poco a poco
-				fy=(angleArm*fvx)+75;
-			}
-
-			if (angleArm>225 && angleArm<=315){
-				// sumar poco a poco
-				fy=((fvx*(angleArm-180))+75)*-1;
-			}
+			if (angleArm>225 && angleArm<=315)  fy=((fvx*(angleArm-180))+75)*-1;
 
 			//posicion del proyectil x
 			if (angleArm>=-45 && angleArm<=135){
