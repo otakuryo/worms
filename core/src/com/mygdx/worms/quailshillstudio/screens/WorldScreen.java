@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -25,15 +27,23 @@ import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
 import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.serverUtils.Persona;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class WorldScreen  extends AbstractScreen {
+
+    //altura y ancho nativos
+    int genW, genH;
+
     SpriteBatch batch;
     Texture guns;
     ShapeRenderer shapeRenderer;
+    BitmapFont font;
+    //BitmapFont font = new BitmapFont();
+
     World world;
     Box2DDebugRenderer renderer;
     OrthographicCamera camera;
@@ -60,7 +70,7 @@ public class WorldScreen  extends AbstractScreen {
     void create_world(){
         float relation=1f;
 
-
+        //font = new BitmapFont();
         //dibujamos imagen
         batch = new SpriteBatch();
         guns = new Texture("hud.png");
@@ -96,6 +106,17 @@ public class WorldScreen  extends AbstractScreen {
         //us.add(new UserData());
         //us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
         //createBall(UserData.BOMB, new Vector2(10,30));
+
+        //font.setColor(Color.WHITE);
+
+        //creamos la fuente para mostrarlo
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/leadcoat.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 26;
+        parameter.shadowOffsetX = 2;
+        parameter.shadowOffsetY = 2;
+        parameter.shadowColor = Color.BLACK;
+        font = generator.generateFont(parameter);
     }
 
     void create_render(){
@@ -190,14 +211,37 @@ public class WorldScreen  extends AbstractScreen {
         shapeRenderer.circle(wUS.get(player).forceArm,wUS.get(player).forceArm,10);
         shapeRenderer.end();
 
-
-
+    }
+    void drawLifeBar(int pLife,int heigh,int width){
+        if (pLife>0) {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(Color.valueOf("#0aa52e"));
+            shapeRenderer.identity();
+            shapeRenderer.rect(width, heigh, pLife * 3, 25);
+            shapeRenderer.end();
+        }else {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(Color.valueOf("#FF4C4C"));
+            shapeRenderer.identity();
+            shapeRenderer.rect(width, heigh, (-1*pLife ), 25);
+            shapeRenderer.end();
+        }
     }
 
+    int textspace=30;
 
     void hudBase(){
+        //dibujamos la vida del usuario :)
+        for (int i = 0; i < wUS.size(); i++) {
+            drawLifeBar(wUS.get(i).life,genH-(28*(i+2)),35);
+        }
+
+        //dibujamos el nombre del usuario
         batch.begin();
-        batch.draw(guns,((camera.viewportWidth*13)/2)-(guns.getWidth()/2), (camera.viewportHeight*11));
+        for (int i = 0; i < wUS.size(); i++) {
+            font.draw(batch,wUS.get(i).getUsername()+i,40,genH-(textspace*(i+1)));
+        }
+        //batch.draw(guns,((camera.viewportWidth*13)/2)-(guns.getWidth()/2), (camera.viewportHeight*11));
         batch.end();
     }
 
@@ -388,6 +432,8 @@ public class WorldScreen  extends AbstractScreen {
 
     @Override
     public void resize(int width, int height) {
+        genW = width;
+        genH = height;
         //tamaño inicial de la camara
         camera.viewportWidth = 100f;
         camera.viewportHeight = 100f * height/width;
@@ -397,6 +443,8 @@ public class WorldScreen  extends AbstractScreen {
     @Override
     public void dispose() {
         batch.dispose();
+
+        //generator.dispose(); // don't forget to dispose to avoid memory leaks!
     }
 
     void enviarDatos(int id,float posx,float posy,float posClickX,float posClicky){
