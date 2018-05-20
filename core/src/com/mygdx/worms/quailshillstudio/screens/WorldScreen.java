@@ -174,14 +174,11 @@ public class WorldScreen  extends AbstractScreen {
         //dibuajdo de rotacion - beta, falla la rotacion :(
 
         //dibujando la posicion de lanzamiento + animacion
-        Vector2 pos = wUS.get(player).worm1.getPosition();
-        float angle = wUS.get(player).worm1.getAngle(); //if you need rotation
-
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.identity();
         shapeRenderer.translate(80, 80, 0);
-        shapeRenderer.rotate(0, 0, 10, angle * 20f);
+        shapeRenderer.rotate(0, 0, 10, wUS.get(player).worm1.getAngle() * 20f);
         shapeRenderer.rect(-12, -12, 24, 24);
         shapeRenderer.end();
 
@@ -192,6 +189,8 @@ public class WorldScreen  extends AbstractScreen {
         shapeRenderer.rotate(0, 0, 1,wUS.get(player).angleArm);
         shapeRenderer.circle(wUS.get(player).forceArm,wUS.get(player).forceArm,10);
         shapeRenderer.end();
+
+
 
     }
 
@@ -308,26 +307,22 @@ public class WorldScreen  extends AbstractScreen {
         //nagulo de lanzamiento
         if (Gdx.input.isKeyPressed(Input.Keys.Y)) {
             wUS.get(player).angleArm+=1;
-            System.out.println("ag: "+wUS.get(player).angleArm);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.H)) {
             if (wUS.get(player).angleArm>-50) {
                 wUS.get(player).angleArm -= 1;
-                System.out.println("dg: " + wUS.get(player).angleArm);
             }
         }
         //fuerza de proyectil
         if (Gdx.input.isKeyPressed(Input.Keys.J)) {
             if (wUS.get(player).forceArm<50) {
                 wUS.get(player).forceArm += 1;
-                System.out.println("af: " + wUS.get(player).forceArm);
             }
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.G)) {
             if (wUS.get(player).forceArm>20) {
                 wUS.get(player).forceArm -= 1;
-                System.out.println("df: " + wUS.get(player).forceArm);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {

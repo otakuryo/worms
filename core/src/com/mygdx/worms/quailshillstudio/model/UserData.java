@@ -129,25 +129,21 @@ public class UserData implements Serializable {
         System.out.println("->>"+posx+" -- "+posy);
         Vector3 box2Dpos = camera.unproject(new Vector3(posx, posy, 0));
         Vector2 position = new Vector2(box2Dpos.x, box2Dpos.y);
-		System.out.println("->> 1");
 		BodyDef defBall = new BodyDef();
 		defBall.type = BodyDef.BodyType.DynamicBody;
 		defBall.position.set(position);
 		Body ball = world.createBody(defBall);
 		ball.setUserData(new UserData(type));
-		System.out.println("->> 2");
 
 		FixtureDef fixDefBall = new FixtureDef();
 		fixDefBall.density = .25f;
 		fixDefBall.restitution = .75f;
 		CircleShape rond = new CircleShape();
 		rond.setRadius(1);
-		System.out.println("->> 3");
 
 		fixDefBall.shape = rond;
 		ball.createFixture(fixDefBall);
 		rond.dispose();
-		System.out.println("->> 4");
 
 		return ball;
 	}
@@ -225,8 +221,6 @@ public class UserData implements Serializable {
 				fy=((fc*(angleArm-180))+75)*-1;
 				y=((pc*(angleArm-180))+3.375f)*-1;
 			}
-			System.out.println("1 y "+fy+" x "+fx);
-			System.out.println("1 yy "+y+" xx "+x);
 
 			Vector2 position = new Vector2(worm1.getPosition().x+(x*1.65f), worm1.getPosition().y+(y*1.65f));
 
