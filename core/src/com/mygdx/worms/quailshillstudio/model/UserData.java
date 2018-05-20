@@ -56,6 +56,9 @@ public class UserData implements Serializable {
 	//Donde y cuando se realizara el click del usuario :)
     private Vector3 clickUser;
     public int typeArm;
+	public float angleArm = -45f;
+	public float forceArm = 1f;
+
 
     String temp = type+","+"posx"+","+"posy"+","+"life"+","+mustDestroy+","+destroyed+","+jump+","+username+","+id+","+count+","+isFlaggedForDelete+","+"posClickX"+","+"posClicky"+","+typeArm;
 
@@ -190,7 +193,60 @@ public class UserData implements Serializable {
 
     	if (ud.posClickX>0 && ud.posClickY>0){
 			//Vector3 box2Dpos = camera.unproject(new Vector3(ud.posClickX, ud.posClickY-30, 0));
-			Vector2 position = new Vector2(worm1.getPosition().x, worm1.getPosition().y+2.25f);
+			float x = 0.15f;
+			float y = 10.15f;
+
+			float fx = 50f;
+			float fy = 0f;
+			float fvx = -50f/90f;
+			System.out.println("1 y "+fy+" x "+fx);
+
+			//fuerza de impulso x
+			if (angleArm>-45 && angleArm<=135){
+				// restar poco a poco
+				fx=(angleArm*fvx)+25;
+			}
+			if (angleArm>135 && angleArm<=315){
+				// restar poco a poco
+				fx=((fvx*(angleArm-180f))+25f)*-1f;
+
+			}
+			//fuerza impulso y
+			if (angleArm>-45 && angleArm<=45){
+				// sumar poco a poco
+				fy=(-angleArm*fvx)+25;
+
+			}
+
+			if (angleArm>45 && angleArm<=225){
+				// restar poco a poco
+				fy=(angleArm*fvx)+75;
+			}
+
+			if (angleArm>225 && angleArm<=315){
+				// sumar poco a poco
+				fy=((fvx*(angleArm-180))+75)*-1;
+			}
+
+			//posicion del proyectil x
+			if (angleArm>=-45 && angleArm<=135){
+				// sumar poco a poco
+			}
+			if (angleArm>135 && angleArm<=315){
+				// restar poco a poco
+			}
+
+			//posicion del proyectil y, fuerza del impulso y
+			if ((angleArm>=-45 && angleArm<=45)||(angleArm>=225 && angleArm<=315)){
+
+				//sumar poco a poco
+			}
+
+			if (angleArm>45 && angleArm<225){
+				//restar poco a poco
+			}
+
+			Vector2 position = new Vector2(worm1.getPosition().x+x, worm1.getPosition().y+y);
 
 			BodyDef defBall = new BodyDef();
 			defBall.type = BodyDef.BodyType.DynamicBody;
@@ -206,7 +262,7 @@ public class UserData implements Serializable {
 			fixDefBall.shape = rond;
 			ball.createFixture(fixDefBall);
 			rond.dispose();
-			ball.applyLinearImpulse(0,22,position.x,position.y,true);
+			ball.applyLinearImpulse(fx,fy,position.x,position.y,true);
 			//ball.applyLinearImpulse(22,22,box2Dpos.x,box2Dpos.y,true);
 			//ball.applyLinearImpulse(100,0,box2Dpos.x,box2Dpos.y,true);
 			//ball.applyLinearImpulse(2,6,box2Dpos.x,box2Dpos.y,true);

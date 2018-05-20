@@ -24,6 +24,7 @@ import com.mygdx.worms.quailshillstudio.polygonClippingUtils.PolygonBox2DShape;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
 import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.serverUtils.Persona;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +92,7 @@ public class WorldScreen  extends AbstractScreen {
 
 
         wUS.put(1,new UserData());
-        wUS.get(1).createWorm(UserData.WORM, new Vector2(40, 55),world,"ariel");
+        wUS.get(1).createWorm(UserData.WORM, new Vector2(70, 48),world,"ariel");
         //us.add(new UserData());
         //us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
         //createBall(UserData.BOMB, new Vector2(10,30));
@@ -128,7 +129,7 @@ public class WorldScreen  extends AbstractScreen {
             if(count %2 == 0){
                 type = UserData.BALL;
             }else{
-                type = UserData.BOMB;
+                type = UserData.BALL;
             }
 
             wUS.get(player).posClickX = Gdx.input.getX();
@@ -178,22 +179,18 @@ public class WorldScreen  extends AbstractScreen {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.identity();
-        shapeRenderer.translate(80, 40, 0);
+        shapeRenderer.translate(80, 80, 0);
         shapeRenderer.rotate(0, 0, 10, angle * 20f);
-        shapeRenderer.rect(-10, -10, 24, 24);
+        shapeRenderer.rect(-12, -12, 24, 24);
         shapeRenderer.end();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.identity();
-        shapeRenderer.translate(80, 40, 0);
-        shapeRenderer.rotate(0, 0, 1,angle*180f);
-        shapeRenderer.circle(20,30,10);
+        shapeRenderer.translate(80, 80, 0);
+        shapeRenderer.rotate(0, 0, 1,wUS.get(player).angleArm);
+        shapeRenderer.circle(wUS.get(player).forceArm+20,wUS.get(player).forceArm+20,10);
         shapeRenderer.end();
-
-
-
-
 
     }
 
@@ -267,25 +264,24 @@ public class WorldScreen  extends AbstractScreen {
         if (Gdx.input.justTouched()){
             //System.out.println(Gdx.input.getX()+" - "+Gdx.input.getY());
         }
-
         //movimiento de la camara
-        if (Gdx.input.isKeyPressed(Input.Keys.U)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.COMMA)) {
             camera.zoom += 0.02;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
             camera.zoom -= 0.02;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            camera.translate(-3, 0, 0);
+            camera.translate(-2, 0, 0);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            camera.translate(3, 0, 0);
+            camera.translate(2, 0, 0);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            camera.translate(0, -3, 0);
+            camera.translate(0, -2, 0);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            camera.translate(0, 3, 0);
+            camera.translate(0, 2, 0);
         }
 
         //Movimiento del personaje
@@ -298,42 +294,61 @@ public class WorldScreen  extends AbstractScreen {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             wUS.get(player).wormAngleUpL();
-            //System.out.println("A");
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             wUS.get(player).wormAngleUpR();
-            //System.out.println("D");
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            //wUS.get(player).wormLeftUP();
-            //System.out.println("A");
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            //wUS.get(player).wormRightUP();
-            //System.out.println("D");
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             wUS.get(player).wormJump();
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
+
+        //movimiento del proyectil
+        //nagulo de lanzamiento
+        if (Gdx.input.isKeyPressed(Input.Keys.Y)) {
+            wUS.get(player).angleArm+=1;
+            System.out.println("ag: "+wUS.get(player).angleArm);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.H)) {
+            if (wUS.get(player).angleArm>-50) {
+                wUS.get(player).angleArm -= 1;
+                System.out.println("dg: " + wUS.get(player).angleArm);
+            }
+        }
+        //fuerza de proyectil
+        if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+            if (wUS.get(player).forceArm<50) {
+                wUS.get(player).forceArm += 1;
+                System.out.println("af: " + wUS.get(player).forceArm);
+            }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.G)) {
+            if (wUS.get(player).forceArm>0) {
+                wUS.get(player).forceArm -= 1;
+                System.out.println("df: " + wUS.get(player).forceArm);
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
             System.out.println("Arm 1");
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
             System.out.println("Arm 2");
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_3)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
             System.out.println("Arm 3");
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_4)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
             System.out.println("Arm 4");
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_5)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
             System.out.println("Arm 5");
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_6)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) {
             System.out.println("Arm 6");
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) {
+            System.out.println("Arm 7");
         }
 
         //A tener en cuenta que si se rota, no se rota las direcciones de teclado XD

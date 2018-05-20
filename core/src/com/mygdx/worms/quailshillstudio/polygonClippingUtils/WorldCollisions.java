@@ -29,7 +29,10 @@ public void beginContact(Contact contact) {
     ub.count++;
 
 	//System.out.println("Fin de la colision..."+b+" - "+ub.count);
-    if (ub.count==4 && ub.getType() == UserData.BALL){
+	if (ub.count==2 && ub.getType() == UserData.BALL){
+		ub.typeObj=UserData.BOMB;
+	}
+    if (ub.count==3 && ub.getType() == UserData.BALL){
         ub.typeObj=UserData.BOMB;
     }
 }
