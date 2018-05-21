@@ -108,8 +108,6 @@ public class WorldScreen  extends AbstractScreen {
         //us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
         //createBall(UserData.BOMB, new Vector2(10,30));
 
-        //font.setColor(Color.WHITE);
-
         //creamos la fuente para mostrarlo
         generator = new FreeTypeFontGenerator(Gdx.files.internal("font/leadcoat.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
