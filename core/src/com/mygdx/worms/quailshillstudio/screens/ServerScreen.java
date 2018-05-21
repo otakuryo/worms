@@ -3,6 +3,7 @@ package com.mygdx.worms.quailshillstudio.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.worms.quailshillstudio.AdapterScreen.AbstractScreen;
 import com.mygdx.worms.quailshillstudio.model.UserData;
 import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
@@ -25,6 +26,8 @@ public class ServerScreen extends AbstractScreen {
     private Skin uiSkin;
     private int admin;
     private String username;
+
+    private boolean started = false;
 
     //creando el cliente
     public Persona persona = new Persona(1);
@@ -75,7 +78,7 @@ public class ServerScreen extends AbstractScreen {
         addActor(volver);
 
         volver.addListener( UIFactory.createListener( ScreenEnum.SELECT ) );
-        if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, true,username,admin,persona));
+        if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, true,username,admin,persona,Servidor.getPlayers()));
 	}
 	private void infoNetwork(){
 	    //creamos la cabecera
@@ -106,7 +109,7 @@ public class ServerScreen extends AbstractScreen {
         addActor(tableNet);
     }
 
-    private void updateTableB(HashMap<Integer,UserData> player){
+    private void updateTableB(final HashMap<Integer,UserData> player){
 	    //ID: pair.getKey(), Valor: pair.getValue()
 
         table.clearChildren();
@@ -119,8 +122,11 @@ public class ServerScreen extends AbstractScreen {
             table.row().spaceTop(10);
             //it.remove(); // avoids a ConcurrentModificationException
         }
-        if (player.get(0).comenzar.contains("comenzarpartida")) ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false,username,admin,persona);
         addActor(table);
+        if (player.get(0).comenzar.contains("comenzarpartida")) {
+            ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false, username, admin, persona, player);
+        }
+
     }
 
     private int sec;
@@ -128,13 +134,13 @@ public class ServerScreen extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         sec++;
-        if (sec%60==0){
+        if (sec%10==0){
             System.out.println("Actualizando base de datos");
             //getAndUpdateData();
             if (admin==1){
                 updateTableB(Servidor.getPlayers());
             }else {
-                HashMap<Integer, UserData> temp = persona.getDataServer("getData","-");
+                HashMap<Integer, UserData> temp = persona.getDataServer("getData", "-");
                 if (temp != null) updateTableB(temp);
             }
         }

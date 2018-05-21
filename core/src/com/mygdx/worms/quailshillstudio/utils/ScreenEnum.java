@@ -38,10 +38,13 @@ public enum ScreenEnum {
 
 	GAME {
 		public AbstractScreen getScreen(Object... params) {
-			if ((Boolean) params[0]){
+            HashMap <Integer,UserData> t = (HashMap <Integer,UserData>) params[4];
+            if ((Boolean) params[0]){
                 Servidor.setStartGame();
+                System.out.println("ADMIN ++> "+t.size());
             }
-			return new WorldScreen(String.valueOf(params[1]),(Integer)params[2],(Persona) params[3]);
+            System.out.println("++> "+t.size());
+			return new WorldScreen(String.valueOf(params[1]),(Integer)params[2],(Persona) params[3],t);
 		}
 	};
 	

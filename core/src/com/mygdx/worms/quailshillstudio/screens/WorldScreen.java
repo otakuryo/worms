@@ -23,10 +23,7 @@ import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.serverUtils.Persona;
 import com.mygdx.worms.serverUtils.Servidor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WorldScreen  extends AbstractScreen {
     //id de usuario
@@ -73,11 +70,13 @@ public class WorldScreen  extends AbstractScreen {
     //worms
     private HashMap<Integer,UserData> wUS = new HashMap<Integer, UserData>();
 
-    public WorldScreen(String username,int admin,Persona persona) {
+    public WorldScreen(String username,int admin,Persona persona, HashMap<Integer,UserData> players) {
+        Gdx.graphics.setContinuousRendering(false);
         this.persona = persona;
         this.username = username;
         this.admin=admin;
-        System.out.println(wUS.size());
+        setIdPlayer(players);
+        System.out.println(players.size()+" + "+wUS.size());
     }
     public WorldScreen(String username) {
         this.username = username;
@@ -86,15 +85,26 @@ public class WorldScreen  extends AbstractScreen {
     //ArrayList<UserData> us = new ArrayList<UserData>();
 
 
-    void setIdPlayer(){
+    void setIdPlayer(HashMap<Integer,UserData> players){
+        for (Object o : players.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            UserData ud = (UserData) pair.getValue();
+            //ud.createWorm(new Vector2(115, 48),world);
+            if (ud.getUsername().contains(username)) this.id=(Integer) pair.getKey();
+            //if (ud.comenzar.contains("comenzarpartida")) ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false);
+        }
+        wUS.putAll(players);
+        System.out.println(id+" - "+username);
+    }
+    void setPlayers(){
         for (Object o : wUS.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
             UserData ud = (UserData) pair.getValue();
             ud.createWorm(new Vector2(115, 48),world);
-            if (ud.getUsername().contains(username)) this.id=(Integer) pair.getKey();
+            //if (ud.getUsername().contains(username)) this.id=(Integer) pair.getKey();
             //if (ud.comenzar.contains("comenzarpartida")) ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false);
         }
-        System.out.println(id+" - "+username);
+        //System.out.println(id+" - "+username);
     }
 
     void create_world(){
@@ -147,7 +157,8 @@ public class WorldScreen  extends AbstractScreen {
         parameter.shadowColor = Color.BLACK;
         font = generator.generateFont(parameter);
 
-        setIdPlayer();
+        //setIdPlayer();
+        setPlayers();
     }
 
     void create_render(){
