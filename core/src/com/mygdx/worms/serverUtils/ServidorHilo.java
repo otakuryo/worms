@@ -64,7 +64,7 @@ public class ServidorHilo extends Thread {
 
         // Construimos el DatagramPacket para enviar la respuesta
         //primero convertimos el array en un objeto y luego en bytes
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream(2000);
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream(10000);
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(Servidor.getPlayers());
         final byte[] dataStr = baos.toByteArray();

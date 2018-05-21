@@ -101,6 +101,7 @@ public class UserData implements Serializable {
         }
 	}
 	public void wormLeft(){
+        System.out.println(worm1.getPosition().x+" . "+worm1.getPosition().y);
 	    if (!jump){
 		    worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
 		    worm1.applyForceToCenter(-20f, 0f, true);
@@ -108,6 +109,7 @@ public class UserData implements Serializable {
 	}
 
 	public void wormRight() {
+        System.out.println(worm1.getPosition().x+" . "+worm1.getPosition().y);
         if (!jump) {
             worm1.setLinearVelocity(worm1.getLinearVelocity().x, 0);
             worm1.applyForceToCenter(20f, 0f, true);
@@ -115,12 +117,14 @@ public class UserData implements Serializable {
 	}
 
     public void wormAngleUpL() {
+        System.out.println(worm1.getPosition().x+" . "+worm1.getPosition().y);
         if (!jump) {
             worm1.setAngularVelocity(2);
         }
     }
 
 	public void wormAngleUpR() {
+        System.out.println(worm1.getPosition().x+" . "+worm1.getPosition().y);
 		if (!jump) {
 			worm1.setAngularVelocity(-2);
 		}
