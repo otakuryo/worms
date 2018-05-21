@@ -65,7 +65,7 @@ public class WorldScreen  extends AbstractScreen {
     private int maxPoint = 260;
 
     //tiempo
-    private float totalTime = 10;
+    private float totalTime = 30;
 
     //worms
     private HashMap<Integer,UserData> wUS = new HashMap<Integer, UserData>();
