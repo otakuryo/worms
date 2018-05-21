@@ -60,10 +60,7 @@ public class UserData implements Serializable {
 	public float forceArm = 20f;
 
 	//solo server
-	int turno = 0;
-
-
-    String temp = type+","+"posx"+","+"posy"+","+"life"+","+mustDestroy+","+destroyed+","+jump+","+username+","+id+","+count+","+isFlaggedForDelete+","+"posClickX"+","+"posClicky"+","+typeArm;
+	public int turno = 0;
 
     public UserData(){}
 
@@ -72,11 +69,12 @@ public class UserData implements Serializable {
         count=0;
     }
 
-	public UserData(int type,String username,String userIP,String team) {
+	public UserData(int type,String username,String userIP,String team,int id) {
 		this.typeObj = type;
 		this.username = username;
 		this.userIP = userIP;
 		this.team = team;
+		this.id=id;
 		count=0;
 	}
 
@@ -151,9 +149,7 @@ public class UserData implements Serializable {
 		return ball;
 	}
 	public Body createWorm(int type, Vector2 position,World world,String username) {
-		this.username=username;
 		this.worldTemp = world;
-		this.typeObj = type;
 		count=0;
 		BodyDef defBall = new BodyDef();
 		defBall.type = BodyDef.BodyType.DynamicBody;
@@ -177,6 +173,31 @@ public class UserData implements Serializable {
 		worm1 = ball;
 		return ball;
 	}
+    public Body createWorm(Vector2 position,World world) {
+        this.worldTemp = world;
+        count=0;
+        BodyDef defBall = new BodyDef();
+        defBall.type = BodyDef.BodyType.DynamicBody;
+        defBall.position.set(position);
+        Body ball = world.createBody(defBall);
+        ball.setUserData(this);
+
+        FixtureDef fixDefBall = new FixtureDef();
+        fixDefBall.density = .25f;
+        fixDefBall.restitution = .25f;
+        fixDefBall.friction=1f;
+        PolygonShape tri = new PolygonShape();
+        tri.setAsBox(1,1);
+        //CircleShape tri = new CircleShape();
+        //tri.setRadius(1);
+
+        fixDefBall.shape = tri;
+        ball.createFixture(fixDefBall);
+        tri.dispose();
+
+        worm1 = ball;
+        return ball;
+    }
 
     public void searchAndCreateBall(UserData ud,OrthographicCamera camera,World world) {
 
@@ -255,14 +276,6 @@ public class UserData implements Serializable {
     public String getUserIP() {return userIP;}
 
     public String getTeam() {return team;}
-
-    public Vector3 getClickUser() {return clickUser;}
-
-    public void setClickUser(Vector3 clickUser) {this.clickUser = clickUser;}
-
-    public int getTypeArm() {return typeArm;}
-
-    public void setTypeArm(int typeArm) {this.typeArm = typeArm;}
 
     public void setStart(){comenzar="comenzarpartida";}
 

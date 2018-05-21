@@ -110,10 +110,10 @@ public class PolygonClipping extends ApplicationAdapter {
 
         //UserData.createBall(UserData.BALL, 0,0,camera,world);
         us.add(new UserData());
-        worm1 = us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world,"1");
+        //worm1 = us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world,"1");
 
         us.add(new UserData());
-        worm2 = us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world,"2");
+        //worm2 = us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world,"2");
         //createBall(UserData.BOMB, new Vector2(10,30));
 
     }

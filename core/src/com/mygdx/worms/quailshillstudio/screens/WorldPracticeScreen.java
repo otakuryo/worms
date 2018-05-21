@@ -21,20 +21,16 @@ import com.mygdx.worms.quailshillstudio.polygonClippingUtils.PolygonBox2DShape;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
 import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.serverUtils.Persona;
-import com.mygdx.worms.serverUtils.Servidor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WorldScreen  extends AbstractScreen {
+public class WorldPracticeScreen extends AbstractScreen {
     //id de usuario
     public int id;
     private String username;
-    int admin;
-
-    private Persona persona = new Persona(1);
 
     //altura y ancho nativos
     private int genW, genH;
@@ -73,11 +69,7 @@ public class WorldScreen  extends AbstractScreen {
     //worms
     private HashMap<Integer,UserData> wUS = new HashMap<Integer, UserData>();
 
-    public WorldScreen(String username,int admin) {
-        this.username = username;
-        this.admin=admin;
-    }
-    public WorldScreen(String username) {
+    public WorldPracticeScreen(String username) {
         this.username = username;
     }
     //Body worm1;
@@ -88,7 +80,6 @@ public class WorldScreen  extends AbstractScreen {
         for (Object o : wUS.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
             UserData ud = (UserData) pair.getValue();
-            ud.createWorm(new Vector2(115, 48),world);
             if (ud.getUsername().contains(username)) this.id=(Integer) pair.getKey();
             //if (ud.comenzar.contains("comenzarpartida")) ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false);
         }
@@ -125,12 +116,12 @@ public class WorldScreen  extends AbstractScreen {
         //us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world);
 
         //forma 2
-        //wUS.put(0,new UserData(UserData.WORM,"ariel","127.0.0.1","GerardTeam",0));
-        //wUS.get(0).createWorm(new Vector2(115, 48),world);
+        wUS.put(0,new UserData(UserData.WORM,"ariel","127.0.0.1","GerardTeam",0));
+        wUS.get(0).createWorm(new Vector2(115, 48),world);
 
 
-        //wUS.put(1,new UserData(UserData.WORM,"ryo","127.0.0.1","FernandoTeam",1));
-        //wUS.get(1).createWorm(new Vector2(70, 48),world);
+        wUS.put(1,new UserData(UserData.WORM,"ryo","127.0.0.1","FernandoTeam",1));
+        wUS.get(1).createWorm(new Vector2(70, 48),world);
         //us.add(new UserData());
         //wUS.get(0).createWorm(UserData.WORM, new Vector2(20, 35),world,"ryo");
         //us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
@@ -289,7 +280,7 @@ public class WorldScreen  extends AbstractScreen {
             totalTime=31;
 
             //TODO TEST ONLY
-            //wUS.get(0).turno=1;
+            wUS.get(0).turno=1;
             //Enviar notificacion de tiempo :)
         }
         batch.begin();
@@ -427,22 +418,22 @@ public class WorldScreen  extends AbstractScreen {
         camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f, maxPoint - effectiveViewportHeight / 2f);
     }
 
-    void showWorms(){
-        wUS.get(0).createWorm(new Vector2(115, 48),world);
+    void enviarDatos(int player){
+        //modificamos userdata y lo enviamos :)
+        HashMap<Integer,UserData> server = new HashMap<Integer, UserData>();
+        server.put(player,wUS.get(player));
+        //wUS.get(player);
     }
+
     @Override
     public void buildStage() {
-        actualizarDatos();
         create_world();
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        actualizarDatos();
-        if (wUS!=null &&wUS.size()>0){
-            create_render();
-        }
+        create_render();
     }
 
     @Override
@@ -466,16 +457,5 @@ public class WorldScreen  extends AbstractScreen {
         //modificamos añdimos los parametros y lo enviamos :)
         System.out.println("Enviando datos, ID: "+id);
         new Persona(id).getDataServer(id+","+wUS.get(id).type+","+posx+","+posy+","+wUS.get(id).life+","+wUS.get(id).mustDestroy+","+wUS.get(id).destroyed+","+wUS.get(id).jump+","+count+","+wUS.get(id).isFlaggedForDelete+","+posClickX+","+posClicky+","+wUS.get(id).typeArm+","+wUS.get(id).angleArm+","+wUS.get(id).forceArm,"setData");
-
-    }
-    void actualizarDatos(){
-
-        if (admin==1){
-            wUS = Servidor.getPlayers();
-        }else {
-            wUS = persona.getDataServer("-","getData");
-            //if (wUS != null) updateTableB(temp);
-        }
-        if (wUS!= null) System.out.println("size red: "+wUS.size());
     }
 }

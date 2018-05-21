@@ -58,7 +58,7 @@ public class ServidorHilo extends Thread {
         dos.writeUTF("S: Tus datos quedaron regitrado!");
         String[] tokens = accion.split(",");
         System.out.println("S: El cliente con username "+tokens[0]+" team: "+tokens[1]+", ID: "+this.idSessio);
-        Servidor.addUserToPlayers(this.idSessio,new UserData(UserData.WORM,tokens[0],socket.getInetAddress().toString(),tokens[1]));
+        Servidor.addUserToPlayers(this.idSessio,new UserData(UserData.WORM,tokens[0],socket.getInetAddress().toString(),tokens[1],this.idSessio));
     }
     private void sendListPlayers() throws IOException {
 

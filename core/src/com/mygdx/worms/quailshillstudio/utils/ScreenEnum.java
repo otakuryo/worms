@@ -13,7 +13,7 @@ public enum ScreenEnum {
 	
 	MAIN_MENU {
 		public AbstractScreen getScreen(Object... params) {
-			return new WorldScreen("ariel");
+			return new MenuScreen();
 		}
 	},
 	
@@ -29,7 +29,7 @@ public enum ScreenEnum {
 			//System.out.println(String.valueOf(params[1])); //server ip
 			//System.out.println(String.valueOf(params[2])); //team
 			//System.out.println(String.valueOf(params[3])); //admin?
-			return new ServerScreen((Integer)params[3]);
+			return new ServerScreen(String.valueOf(params[0]),(Integer)params[3]);
 		}
 	},
 
@@ -38,7 +38,7 @@ public enum ScreenEnum {
 			if ((Boolean) params[0]){
                 Servidor.setStartGame();
             }
-			return new WorldScreen("ariel");
+			return new WorldScreen(String.valueOf(params[1]),(Integer)params[2]);
 		}
 	};
 	
