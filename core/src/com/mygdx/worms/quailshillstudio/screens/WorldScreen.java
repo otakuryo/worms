@@ -43,7 +43,7 @@ public class WorldScreen  extends AbstractScreen {
 
     SpriteBatch batch;
     ShapeRenderer shapeRenderer;
-    BitmapFont font;
+    BitmapFont font, foncount;
 
     Texture help;
     boolean showHelp;
@@ -66,7 +66,7 @@ public class WorldScreen  extends AbstractScreen {
     private int maxPoint = 260;
 
     //tiempo
-    float totalTime = 5 * 60;
+    float totalTime = 31;
 
     //worms
     HashMap<Integer,UserData> wUS = new HashMap<Integer, UserData>();
@@ -124,6 +124,7 @@ public class WorldScreen  extends AbstractScreen {
         parameter.shadowOffsetY = 2;
         parameter.shadowColor = Color.BLACK;
         font = generator.generateFont(parameter);
+        foncount = generator.generateFont(parameter);
     }
 
     void create_render(){
@@ -152,17 +153,7 @@ public class WorldScreen  extends AbstractScreen {
         }
         //crea un objeto nuevo al pulsar
         if(Gdx.input.justTouched() && wUS.get(player).life>0){
-            int type;
-            count++;
-            if(count %2 == 0){
-                type = UserData.BOMB;
-            }else{
-                type = UserData.BOMB;
-            }
-
-            wUS.get(player).posClickX = Gdx.input.getX();
-            wUS.get(player).posClickY = Gdx.input.getY();
-            wUS.get(player).type = type;
+            shootBoomb(player);
 
             //Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             //UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
@@ -219,6 +210,20 @@ public class WorldScreen  extends AbstractScreen {
         shapeRenderer.end();
 
     }
+
+    void shootBoomb(int player){
+        int type;
+        count++;
+        if(count %2 == 0){
+            type = UserData.BOMB;
+        }else{
+            type = UserData.BOMB;
+        }
+
+        wUS.get(player).posClickX = 100;
+        wUS.get(player).posClickY = 100;
+        wUS.get(player).type = type;
+    }
     void drawLifeBar(int pLife,int heigh,int width){
         if (pLife>0) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -251,17 +256,24 @@ public class WorldScreen  extends AbstractScreen {
             batch.draw(help, ConfigGen.SCREEN_WIDTH / 5, ConfigGen.SCREEN_HEIGHT / 6);
             batch.end();
         }
+        tiempoCounter();
     }
 
-    void tiempo(){
+    void tiempoCounter(){
         float deltaTime = Gdx.graphics.getDeltaTime(); //You might prefer getRawDeltaTime()
+
 
         totalTime -= deltaTime; //if counting down
 
-        int minutes = ((int)totalTime) / 60;
-        int seconds = ((int)totalTime) % 60;
-
-        System.out.println("time: "+minutes+":"+seconds);
+        int min = ((int)totalTime) / 60;
+        int sec = ((int)totalTime) % 60;
+        if (sec<0){
+            totalTime=31;
+            //Enviar notificacion de tiempo :)
+        }
+        batch.begin();
+        font.draw(batch,"Tiempo restante: "+sec,genW/2-120,40);
+        batch.end();
     }
 
     public void switchGround(List<PolygonBox2DShape> rs) {
@@ -377,6 +389,9 @@ public class WorldScreen  extends AbstractScreen {
             if (wUS.get(player).forceArm>20) {
                 wUS.get(player).forceArm -= 1;
             }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            shootBoomb(player);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
             showHelp = !showHelp;
