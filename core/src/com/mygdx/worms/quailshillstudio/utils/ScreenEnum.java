@@ -13,7 +13,7 @@ public enum ScreenEnum {
 	
 	MAIN_MENU {
 		public AbstractScreen getScreen(Object... params) {
-			return new WorldScreen();
+			return new WorldScreen("ariel");
 		}
 	},
 	
@@ -38,7 +38,7 @@ public enum ScreenEnum {
 			if ((Boolean) params[0]){
                 Servidor.setStartGame();
             }
-			return new WorldScreen();
+			return new WorldScreen("ariel");
 		}
 	};
 	

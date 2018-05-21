@@ -25,8 +25,12 @@ import com.mygdx.worms.serverUtils.Persona;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WorldScreen  extends AbstractScreen {
+    //id de usuario
+    public int id;
+    private String username;
 
     //altura y ancho nativos
     private int genW, genH;
@@ -63,11 +67,27 @@ public class WorldScreen  extends AbstractScreen {
     private float totalTime = 31;
 
     //worms
-    HashMap<Integer,UserData> wUS = new HashMap<Integer, UserData>();
+    private HashMap<Integer,UserData> wUS = new HashMap<Integer, UserData>();
+
+    public WorldScreen(String username) {
+        this.username = username;
+    }
     //Body worm1;
     //ArrayList<UserData> us = new ArrayList<UserData>();
 
+
+    void setIdPlayer(){
+        for (Object o : wUS.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            UserData ud = (UserData) pair.getValue();
+            if (ud.getUsername().contains(username)) this.id=ud.id;
+            //if (ud.comenzar.contains("comenzarpartida")) ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false);
+            //it.remove(); // avoids a ConcurrentModificationException
+        }
+    }
+
     void create_world(){
+        setIdPlayer();
         float relation=1f;
 
         //font = new BitmapFont();
@@ -98,11 +118,11 @@ public class WorldScreen  extends AbstractScreen {
 
         //forma 2
         wUS.put(0,new UserData());
-        wUS.get(0).createWorm(UserData.WORM, new Vector2(115, 48),world,"Fantasma");
+        wUS.get(0).createWorm(UserData.WORM, new Vector2(115, 48),world,"ariel");
 
 
         wUS.put(1,new UserData());
-        wUS.get(1).createWorm(UserData.WORM, new Vector2(70, 48),world,"TU");
+        wUS.get(1).createWorm(UserData.WORM, new Vector2(70, 48),world,"ryo");
         //us.add(new UserData());
         //wUS.get(0).createWorm(UserData.WORM, new Vector2(20, 35),world,"ryo");
         //us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
@@ -119,10 +139,9 @@ public class WorldScreen  extends AbstractScreen {
     }
 
     void create_render(){
-        int player = 1;
 
         //movimiento de camera
-        handleInput(player);
+        handleInput(id);
         camera.update();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -132,19 +151,9 @@ public class WorldScreen  extends AbstractScreen {
 
         //UserData.createBall(type,Gdx.input.getX(), Gdx.input.getY(),camera,world);
 
-        //comprobamos si alguien lanzo un proyectil
-        wUS.get(player).searchAndCreateBall(wUS.get(player),camera,world);
-
-        //si el jugador se encuentra fuera del rango, se elimina del mapa :(
-        if (wUS.get(player).worm1.getPosition().y<0){
-            //System.out.println(wUS.get(player).worm1.getPosition().x+" - "+wUS.get(player).worm1.getPosition().y);
-            System.out.println("El jugador: "+wUS.get(player).getUsername()+" murio ahogado :( "+wUS.get(player).life);
-            wUS.get(player).life=-10;
-            wUS.get(player).mustDestroy=true;
-        }
         //crea un objeto nuevo al pulsar
-        if(Gdx.input.justTouched() && wUS.get(player).life>0){
-            shootBoomb(player);
+        if(Gdx.input.justTouched() && wUS.get(id).life>0){
+            shootBoomb(id);
 
             //Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             //UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
@@ -179,7 +188,7 @@ public class WorldScreen  extends AbstractScreen {
         box2dTimeStep(Gdx.graphics.getDeltaTime());
 
         //Dibujamos el HUD
-        hudBase();
+        hudShootAndSearchDeath();
 
         //dibuajdo de rotacion - beta, falla la rotacion :(
 
@@ -188,7 +197,7 @@ public class WorldScreen  extends AbstractScreen {
         shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.identity();
         shapeRenderer.translate(80, 80, 0);
-        shapeRenderer.rotate(0, 0, 10, wUS.get(player).worm1.getAngle() * 20f);
+        shapeRenderer.rotate(0, 0, 10, wUS.get(id).worm1.getAngle() * 20f);
         shapeRenderer.rect(-12, -12, 24, 24);
         shapeRenderer.end();
 
@@ -196,8 +205,8 @@ public class WorldScreen  extends AbstractScreen {
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.identity();
         shapeRenderer.translate(80, 80, 0);
-        shapeRenderer.rotate(0, 0, 1,wUS.get(player).angleArm);
-        shapeRenderer.circle(wUS.get(player).forceArm,wUS.get(player).forceArm,10);
+        shapeRenderer.rotate(0, 0, 1,wUS.get(id).angleArm);
+        shapeRenderer.circle(wUS.get(id).forceArm,wUS.get(id).forceArm,10);
         shapeRenderer.end();
 
     }
@@ -232,16 +241,26 @@ public class WorldScreen  extends AbstractScreen {
         }
     }
 
-    int textspace=30;
-
-    void hudBase(){
+    private void hudShootAndSearchDeath(){
 
         //dibujamos el nombre del usuario
         for (int i = 0; i < wUS.size(); i++) {
             drawLifeBar(wUS.get(i).life,genH-(28*(i+2)),35);
             batch.begin();
-            font.draw(batch,wUS.get(i).getUsername(),40,genH-(textspace*(i+1)));
+            //int textspace = 30;
+            font.draw(batch,wUS.get(i).getUsername(),40,genH-(30*(i+1)));
             batch.end();
+
+            //comprobamos si alguien lanzo un proyectil
+            wUS.get(i).searchAndCreateBall(wUS.get(i),camera,world);
+
+            //si el jugador se encuentra fuera del rango, se elimina del mapa :(
+            if (wUS.get(i).worm1.getPosition().y<0){
+                //System.out.println(wUS.get(player).worm1.getPosition().x+" - "+wUS.get(player).worm1.getPosition().y);
+                System.out.println("El jugador: "+wUS.get(i).getUsername()+" murio ahogado :( "+wUS.get(i).life);
+                wUS.get(i).life=-10;
+                wUS.get(i).mustDestroy=true;
+            }
         }
         if (showHelp) {
             batch.begin();
@@ -251,7 +270,7 @@ public class WorldScreen  extends AbstractScreen {
         tiempoCounter();
     }
 
-    void tiempoCounter(){
+    private void tiempoCounter(){
         float deltaTime = Gdx.graphics.getDeltaTime(); //You might prefer getRawDeltaTime()
 
 
@@ -278,7 +297,7 @@ public class WorldScreen  extends AbstractScreen {
         polyVerts.add(grFix);
     }
 
-    protected void createGround() {
+    private void createGround() {
         BodyDef groundDef = new BodyDef();
         groundDef.type = BodyDef.BodyType.StaticBody;
         groundDef.position.set(0, 0);
