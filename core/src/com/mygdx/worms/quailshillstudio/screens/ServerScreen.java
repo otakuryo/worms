@@ -118,6 +118,7 @@ public class ServerScreen extends AbstractScreen {
             table.row().spaceTop(10);
             if (ud.comenzar.contains("comenzarpartida")) ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false);
             //it.remove(); // avoids a ConcurrentModificationException
+
         }
         addActor(table);
     }
