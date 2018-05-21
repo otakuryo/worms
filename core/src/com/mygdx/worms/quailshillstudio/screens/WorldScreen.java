@@ -71,7 +71,7 @@ public class WorldScreen  extends AbstractScreen {
     private HashMap<Integer,UserData> wUS = new HashMap<Integer, UserData>();
 
     public WorldScreen(String username,int admin,Persona persona, HashMap<Integer,UserData> players) {
-        Gdx.graphics.setContinuousRendering(false);
+        //Gdx.graphics.setContinuousRendering(false);
         this.persona = persona;
         this.username = username;
         this.admin=admin;
