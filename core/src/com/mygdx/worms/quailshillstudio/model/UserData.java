@@ -59,6 +59,9 @@ public class UserData implements Serializable {
 	public float angleArm = -45f;
 	public float forceArm = 20f;
 
+	//solo server
+	int turno = 0;
+
 
     String temp = type+","+"posx"+","+"posy"+","+"life"+","+mustDestroy+","+destroyed+","+jump+","+username+","+id+","+count+","+isFlaggedForDelete+","+"posClickX"+","+"posClicky"+","+typeArm;
 

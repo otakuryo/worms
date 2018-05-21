@@ -12,25 +12,15 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.worms.quailshillstudio.AdapterScreen.AbstractScreen;
 import com.mygdx.worms.quailshillstudio.model.UserData;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.GroundFixture;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.PolygonBox2DShape;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
 import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
-import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
-import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
-import com.mygdx.worms.quailshillstudio.utils.UIFactory;
 import com.mygdx.worms.serverUtils.Persona;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,34 +29,38 @@ import java.util.List;
 public class WorldScreen  extends AbstractScreen {
 
     //altura y ancho nativos
-    int genW, genH;
+    private int genW, genH;
 
-    SpriteBatch batch;
-    ShapeRenderer shapeRenderer;
-    BitmapFont font, foncount;
+    //fuentes, dubujos y texturas de ayuda
+    private SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
+    private BitmapFont font;
+    private FreeTypeFontGenerator generator;
 
-    Texture help;
-    boolean showHelp;
-    FreeTypeFontGenerator generator;
-    //BitmapFont font = new BitmapFont();
+    //ayuda
+    private Texture help;
+    private boolean showHelp;
 
-    World world;
-    Box2DDebugRenderer renderer;
-    OrthographicCamera camera;
+    //mundo, camara y render
+    private World world;
+    private Box2DDebugRenderer renderer;
+    private OrthographicCamera camera;
+
+    //mapa destruible
     private List<GroundFixture> polyVerts = new ArrayList<GroundFixture>();
     private boolean mustCreate;
+
+    //reloj para el movimiento del mapa
     private float accu;
     private static final float TIME_STEP = 1 / 60f;
     private static int speedIte = 6, posIte = 2;
     private int count = 0;
 
-    private float rotationSpeed;
-
     //maxPoint es el punto maximo de recorrido en la pantalla en el eje x,y
     private int maxPoint = 260;
 
     //tiempo
-    float totalTime = 31;
+    private float totalTime = 31;
 
     //worms
     HashMap<Integer,UserData> wUS = new HashMap<Integer, UserData>();
@@ -124,7 +118,6 @@ public class WorldScreen  extends AbstractScreen {
         parameter.shadowOffsetY = 2;
         parameter.shadowColor = Color.BLACK;
         font = generator.generateFont(parameter);
-        foncount = generator.generateFont(parameter);
     }
 
     void create_render(){
@@ -210,6 +203,7 @@ public class WorldScreen  extends AbstractScreen {
         shapeRenderer.end();
 
     }
+
 
     void shootBoomb(int player){
         int type;
@@ -401,12 +395,8 @@ public class WorldScreen  extends AbstractScreen {
         }
 
         //A tener en cuenta que si se rota, no se rota las direcciones de teclado XD
-        if (Gdx.input.isKeyPressed(Input.Keys.I)) {
-            camera.rotate(-rotationSpeed, 0, 0, 1);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.K)) {
-            camera.rotate(rotationSpeed, 0, 0, 1);
-        }
+        //if (Gdx.input.isKeyPressed(Input.Keys.I)) camera.rotate(-rotationSpeed, 0, 0, 1);
+        //if (Gdx.input.isKeyPressed(Input.Keys.K)) camera.rotate(rotationSpeed, 0, 0, 1);
 
         //limite de zoom de la camara :)
         camera.zoom = MathUtils.clamp(camera.zoom, 0.32f, 230/camera.viewportWidth);
