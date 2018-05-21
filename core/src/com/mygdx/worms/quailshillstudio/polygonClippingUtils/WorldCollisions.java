@@ -145,7 +145,10 @@ public class WorldCollisions implements ContactListener {
         }
 
         //Here we paste all the computed polys to the game screen
-        game.switchGround(totalRS);
+        if (game!=null) game.switchGround(totalRS);
+        if (game2!=null) game2.switchGround(totalRS);
+
+
         ((UserData) body.getUserData()).mustDestroy = true;
     }
 }

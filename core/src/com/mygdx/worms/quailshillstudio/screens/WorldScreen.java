@@ -97,12 +97,27 @@ public class WorldScreen  extends AbstractScreen {
         System.out.println(id+" - "+username);
     }
     void setPlayers(){
+        int ic=0;
+        ArrayList<Vector2> pos = new ArrayList<Vector2>();
+        pos.add(new Vector2(198,54));
+        pos.add(new Vector2(115,48));
+        pos.add(new Vector2(98,48));
+        pos.add(new Vector2(82,48));
+        pos.add(new Vector2(61,48));
+        pos.add(new Vector2(39,55));
+        pos.add(new Vector2(20,33));
+        pos.add(new Vector2(142,81));
+        pos.add(new Vector2(171,56));
+        pos.add(new Vector2(183,56));
+        pos.add(new Vector2(159,78));
+
         for (Object o : wUS.entrySet()) {
             Map.Entry pair = (Map.Entry) o;
             UserData ud = (UserData) pair.getValue();
-            ud.createWorm(new Vector2(115, 48),world);
+            ud.createWorm(pos.get(ic),world);
             //if (ud.getUsername().contains(username)) this.id=(Integer) pair.getKey();
             //if (ud.comenzar.contains("comenzarpartida")) ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false);
+            ic++;
         }
         //System.out.println(id+" - "+username);
     }
@@ -302,7 +317,7 @@ public class WorldScreen  extends AbstractScreen {
             totalTime=31;
 
             //TODO TEST ONLY
-            //wUS.get(0).turno=1;
+            wUS.get(0).turno=1;
             //Enviar notificacion de tiempo :)
         }
         batch.begin();

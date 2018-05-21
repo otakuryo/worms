@@ -28,9 +28,14 @@ public class MenuScreen extends AbstractScreen {
         //Image bg = new Image(txtrBg);
         //addActor(bg);
         ImageTextButton btnStart = new ImageTextButton("Start", uiSkin);
-        btnStart.setPosition(getWidth() / 2-100, getHeight()/2 +100);
+        btnStart.setPosition(getWidth() / 2-100, getHeight()/2 +200);
         btnStart.setSize(200,80);
         addActor(btnStart);
+
+        ImageTextButton btnPractice = new ImageTextButton("Tutorial", uiSkin);
+        btnStart.setPosition(getWidth() / 2-100, getHeight()/2 +100);
+        btnStart.setSize(200,80);
+        addActor(btnPractice);
 
         ImageTextButton btnExit = new ImageTextButton("Exit", uiSkin);
         btnExit.setPosition(getWidth() / 2 -100, getHeight()/2);
@@ -38,6 +43,8 @@ public class MenuScreen extends AbstractScreen {
         addActor(btnExit);
 
         btnStart.addListener( UIFactory.createListener(ScreenEnum.SELECT) );
+
+        btnPractice.addListener( UIFactory.createListener(ScreenEnum.PRACTICE) );
 
         btnExit.addListener(
                 new InputListener() {

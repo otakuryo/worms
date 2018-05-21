@@ -6,7 +6,8 @@ import java.io.*;
 import java.net.*;
 import java.util.HashMap;
 import java.util.logging.*;
-public class Servidor {
+
+public class Servidor implements Serializable{
 	static int PORT=10578;
 	private static HashMap<Integer,UserData> players = new HashMap<Integer, UserData>();
 

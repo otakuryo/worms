@@ -43,7 +43,7 @@ public class WorldPracticeScreen extends AbstractScreen {
 
     //ayuda
     private Texture help;
-    private boolean showHelp;
+    private boolean showHelp=true;
 
     //mundo, camara y render
     private World world;
@@ -64,7 +64,7 @@ public class WorldPracticeScreen extends AbstractScreen {
     private int maxPoint = 260;
 
     //tiempo
-    private float totalTime = 10;
+    private float totalTime = 1000;
 
     //worms
     private HashMap<Integer,UserData> wUS = new HashMap<Integer, UserData>();
@@ -116,12 +116,12 @@ public class WorldPracticeScreen extends AbstractScreen {
         //us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world);
 
         //forma 2
-        wUS.put(0,new UserData(UserData.WORM,"ariel","127.0.0.1","GerardTeam",0));
-        wUS.get(0).createWorm(new Vector2(115, 48),world);
+        wUS.put(0,new UserData(UserData.WORM,"TU","127.0.0.1","GerardTeam",0));
+        wUS.get(0).createWorm(new Vector2(70, 48),world);
 
 
-        wUS.put(1,new UserData(UserData.WORM,"ryo","127.0.0.1","FernandoTeam",1));
-        wUS.get(1).createWorm(new Vector2(70, 48),world);
+        wUS.put(1,new UserData(UserData.WORM,"FANTASMA","127.0.0.1","FernandoTeam",1));
+        wUS.get(1).createWorm(new Vector2(115, 48),world);
         //us.add(new UserData());
         //wUS.get(0).createWorm(UserData.WORM, new Vector2(20, 35),world,"ryo");
         //us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
@@ -151,12 +151,11 @@ public class WorldPracticeScreen extends AbstractScreen {
         renderer.render(world, camera.combined);
 
         //crea un objeto nuevo al pulsar
-        if(Gdx.input.justTouched() && wUS.get(id).life>0){
-            shootBoomb(id);
+        //if(Gdx.input.justTouched() && wUS.get(id).life>0)shootBoomb(id);
 
             //Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             //UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
-        }
+
 
         //en esta parte eliminamos parte del mapa si es que colisiona
         for (int i = 0; i < world.getBodyCount(); i++) {
@@ -280,7 +279,7 @@ public class WorldPracticeScreen extends AbstractScreen {
             totalTime=31;
 
             //TODO TEST ONLY
-            wUS.get(0).turno=1;
+            //wUS.get(0).turno=1;
             //Enviar notificacion de tiempo :)
         }
         batch.begin();

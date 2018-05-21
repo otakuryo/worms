@@ -3,10 +3,7 @@ package com.mygdx.worms.quailshillstudio.utils;
 
 import com.mygdx.worms.quailshillstudio.AdapterScreen.AbstractScreen;
 import com.mygdx.worms.quailshillstudio.model.UserData;
-import com.mygdx.worms.quailshillstudio.screens.SelectScreen;
-import com.mygdx.worms.quailshillstudio.screens.MenuScreen;
-import com.mygdx.worms.quailshillstudio.screens.ServerScreen;
-import com.mygdx.worms.quailshillstudio.screens.WorldScreen;
+import com.mygdx.worms.quailshillstudio.screens.*;
 import com.mygdx.worms.serverUtils.Persona;
 import com.mygdx.worms.serverUtils.Servidor;
 
@@ -23,6 +20,11 @@ public enum ScreenEnum {
 	SELECT {
 		public AbstractScreen getScreen(Object... params) {
 			return new SelectScreen();
+		}
+	},
+	PRACTICE {
+		public AbstractScreen getScreen(Object... params) {
+			return new WorldPracticeScreen("TU");
 		}
 	},
 
