@@ -78,6 +78,7 @@ public class WorldCollisions implements ContactListener {
         }
         clipped = false;
     }
+<<<<<<< HEAD
 
     private float[] getVerts(Shape shape) {
         float[] verts = new float[0];
@@ -116,6 +117,83 @@ public class WorldCollisions implements ContactListener {
     }
 
     private void clippingGround(Body a, Body b, UserData dataA) {
+=======
+}
+
+@Override
+public void endContact(Contact contact) {
+    //ub.isFlaggedForDelete=true;
+}
+
+@Override
+public void preSolve(Contact contact, Manifold oldManifold) {
+
+}
+
+@Override
+public void postSolve(Contact contact, ContactImpulse impulse) {
+	 Body a= contact.getFixtureA().getBody();
+	   Body b= contact.getFixtureB().getBody();
+	   UserData dataA = (UserData)a.getUserData();
+	   UserData dataB = (UserData)b.getUserData();
+	   
+	if(dataA instanceof UserData && dataA.getType() == UserData.GROUND && dataB instanceof UserData && dataB.getType() == UserData.BOMB){
+		clippingGround(a, b, dataA);
+	}else if(dataB instanceof UserData && dataB.getType() == UserData.GROUND && dataA instanceof UserData && dataA.getType() == UserData.BOMB){
+		clippingGround(b, a, dataB);
+	   }
+
+	   if (dataB.getUsername()==null) {
+		   System.out.println("-->>" + UserData.WORM + " - " + dataB.getUsername());
+	   }
+    if (dataA != null && dataA.getType() == UserData.WORM && dataB.getType() == UserData.BOMB){
+		dataA.life= dataA.life-10;
+		System.out.println("-->"+dataA.getUsername()+ " . sufrio danyos, vida restante: "+dataA.life);
+		if (dataA.life<1){
+			dataA.isFlaggedForDelete=true;
+		}
+	}
+	clipped = false;
+	}
+
+	private float[] getVerts(Shape shape) {
+		float [] verts = new float[0];
+		if(shape instanceof PolygonShape){
+			PolygonShape polyShape = (PolygonShape) shape;
+			verts = new float[polyShape.getVertexCount()*2];
+	        for(int i = 0, j = 0; i < polyShape.getVertexCount(); i++){
+	            Vector2 vect = new Vector2();
+	            polyShape.getVertex(i, vect);
+	            verts[j++] = vect.x;
+	            verts[j++] = vect.y;
+	        }
+		}
+		if(shape instanceof ChainShape){
+			ChainShape cshape = (ChainShape) shape;
+	        verts = null;
+	    	if(cshape.isLooped()){
+		    	verts = new float[cshape.getVertexCount()*2 - 2];
+		        for(int i = 0, j = 0; i < cshape.getVertexCount() - 1; i++){
+		            Vector2 vect = new Vector2();
+		            cshape.getVertex(i, vect);
+		            verts[j++] = vect.x;
+		            verts[j++] = vect.y;
+		        }
+	        }else{
+	        	verts = new float[cshape.getVertexCount()*2];
+		        for(int i = 0, j = 0; i < cshape.getVertexCount(); i++){
+		            Vector2 vect = new Vector2();
+		            cshape.getVertex(i, vect);
+		            verts[j++] = vect.x;
+		            verts[j++] = vect.y;
+		        }
+	        }
+		}
+		return verts;
+	}
+
+	private void clippingGround(Body a, Body b, UserData dataA) {
+>>>>>>> parent of 169e083... funcionamiento correcto de los proyectiles :,)
 		/*if(!clipped) clipped = true;
 		else return;*/
         List<PolygonBox2DShape> totalRS = new ArrayList<PolygonBox2DShape>();

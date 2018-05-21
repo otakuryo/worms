@@ -174,9 +174,37 @@ public class WorldScreen  extends AbstractScreen {
 
         renderer.render(world, camera.combined);
 
+<<<<<<< HEAD
         //crea un objeto nuevo al pulsar
         if(Gdx.input.justTouched() && wUS.get(id).life>0){
             shootBoomb(id);
+=======
+        //UserData.createBall(type,Gdx.input.getX(), Gdx.input.getY(),camera,world);
+
+        //comprobamos si alguien lanzo un proyectil
+        wUS.get(player).searchAndCreateBall(wUS.get(player),camera,world);
+
+        //si el jugador se encuentra fuera del rango, se elimina del mapa :(
+        if (wUS.get(player).worm1.getPosition().y<0){
+            //System.out.println(wUS.get(player).worm1.getPosition().x+" - "+wUS.get(player).worm1.getPosition().y);
+            System.out.println("El jugador: "+wUS.get(player).getUsername()+" murio ahogado :(");
+            wUS.get(player).life=-10;
+            wUS.get(player).mustDestroy=true;
+        }
+        //crea un objeto nuevo al pulsar
+        if(Gdx.input.justTouched()){
+            int type;
+            count++;
+            if(count %2 == 0){
+                type = UserData.BALL;
+            }else{
+                type = UserData.BALL;
+            }
+
+            wUS.get(player).posClickX = Gdx.input.getX();
+            wUS.get(player).posClickY = Gdx.input.getY();
+            wUS.get(player).type = type;
+>>>>>>> parent of 169e083... funcionamiento correcto de los proyectiles :,)
 
             //Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             //UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
@@ -198,7 +226,6 @@ public class WorldScreen  extends AbstractScreen {
                 if (data.isFlaggedForDelete) {
                     world.destroyBody(bodies.get(i));
                     bodies.get(i).setUserData(null);
-                    System.out.println("destruido...");
                     //bodies.removeIndex(i);
                 }
             }
@@ -228,8 +255,13 @@ public class WorldScreen  extends AbstractScreen {
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.identity();
         shapeRenderer.translate(80, 80, 0);
+<<<<<<< HEAD
         shapeRenderer.rotate(0, 0, 1,wUS.get(id).angleArm);
         shapeRenderer.circle(wUS.get(id).forceArm,wUS.get(id).forceArm,10);
+=======
+        shapeRenderer.rotate(0, 0, 1,wUS.get(player).angleArm);
+        shapeRenderer.circle(wUS.get(player).forceArm+20,wUS.get(player).forceArm+20,10);
+>>>>>>> parent of 169e083... funcionamiento correcto de los proyectiles :,)
         shapeRenderer.end();
 
     }
@@ -416,7 +448,7 @@ public class WorldScreen  extends AbstractScreen {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.G)) {
-            if (wUS.get(player).forceArm>20) {
+            if (wUS.get(player).forceArm>0) {
                 wUS.get(player).forceArm -= 1;
             }
         }
@@ -480,6 +512,7 @@ public class WorldScreen  extends AbstractScreen {
     void enviarDatos(int id,float posx,float posy,float posClickX,float posClicky){
         //modificamos añdimos los parametros y lo enviamos :)
         System.out.println("Enviando datos, ID: "+id);
+<<<<<<< HEAD
         new Persona(id).getDataServer(id+","+wUS.get(id).type+","+posx+","+posy+","+wUS.get(id).life+","+wUS.get(id).mustDestroy+","+wUS.get(id).destroyed+","+wUS.get(id).jump+","+count+","+wUS.get(id).isFlaggedForDelete+","+posClickX+","+posClicky+","+wUS.get(id).typeArm+","+wUS.get(id).angleArm+","+wUS.get(id).forceArm,"setData");
 
     }
@@ -492,5 +525,8 @@ public class WorldScreen  extends AbstractScreen {
             //if (wUS != null) updateTableB(temp);
         }
         //if (wUS!= null) System.out.println("size red: "+wUS.size());
+=======
+        new Persona(id).getDataServer(id+","+wUS.get(id).type+","+posx+","+posy+","+wUS.get(id).life+","+wUS.get(id).mustDestroy+","+wUS.get(id).destroyed+","+wUS.get(id).jump+","+count+","+wUS.get(id).isFlaggedForDelete+","+posClickX+","+posClicky+","+wUS.get(id).typeArm,"setData");
+>>>>>>> parent of 169e083... funcionamiento correcto de los proyectiles :,)
     }
 }

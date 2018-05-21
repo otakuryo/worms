@@ -27,7 +27,7 @@ public class UserData implements Serializable {
     public float posClickX,posClickY;
     public float posX,posY;
 
-	public int life = 50;
+	public int life = 100;
 
 	//5 6 7
 	public int typeObj; // worm
@@ -57,7 +57,7 @@ public class UserData implements Serializable {
     private Vector3 clickUser;
     public int typeArm;
 	public float angleArm = -45f;
-	public float forceArm = 20f;
+	public float forceArm = 1f;
 
 	//solo server
 	public int turno = 0;
@@ -174,6 +174,16 @@ public class UserData implements Serializable {
 		ball.createFixture(fixDefBall);
 		tri.dispose();
 
+		Vector2 pos = ball.getWorldCenter();
+		float angle = ball.getAngle(); //if you need rotation
+
+		ShapeRenderer shapeRenderer = new ShapeRenderer();
+		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+		shapeRenderer.setColor(Color.BLUE);
+		shapeRenderer.box(position.x,position.y,0,100,100,100);
+		//shapeRenderer.circle(pos.x, pos.y,tri.getRadius());
+		shapeRenderer.end();
+
 		worm1 = ball;
 		return ball;
 	}
@@ -214,9 +224,6 @@ public class UserData implements Serializable {
 			float fy = 0f;
 			float fc = -50f/90f; // tramo constante de la fuerza
 			float pc = -2.25f/90f; // tramo constante de la posicion
-			//float fcv = 0.4f;
-			float fcv = forceArm*0.02f;
-			System.out.println(fcv);
 
 			//si damos la vuelta completa se resetea la posicion
 			if (angleArm > 315)
@@ -250,7 +257,7 @@ public class UserData implements Serializable {
 				y=((pc*(angleArm-180))+3.375f)*-1;
 			}
 
-			Vector2 position = new Vector2(worm1.getPosition().x+(x*1.65f), worm1.getPosition().y+(y*1.65f));
+			Vector2 position = new Vector2(worm1.getPosition().x+x, worm1.getPosition().y+y);
 
 			BodyDef defBall = new BodyDef();
 			defBall.type = BodyDef.BodyType.DynamicBody;
@@ -266,7 +273,7 @@ public class UserData implements Serializable {
 			fixDefBall.shape = rond;
 			ball.createFixture(fixDefBall);
 			rond.dispose();
-			ball.applyLinearImpulse(fx*fcv,fy*fcv,position.x,position.y,true);
+			ball.applyLinearImpulse(fx,fy,position.x,position.y,true);
 			//ball.applyLinearImpulse(22,22,box2Dpos.x,box2Dpos.y,true);
 			//ball.applyLinearImpulse(100,0,box2Dpos.x,box2Dpos.y,true);
 			//ball.applyLinearImpulse(2,6,box2Dpos.x,box2Dpos.y,true);
@@ -284,7 +291,7 @@ public class UserData implements Serializable {
     public void setStart(){comenzar="comenzarpartida";}
 
     public void modUserData(int idE,int typeE,float posXE,float posYE,int lifeE,boolean mustDestroyE,boolean destroyedE
-			,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickXE,float posclickYE,int typeArmE,float angleArmE,float forceArmE){
+			,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickXE,float posclickYE,int typeArmE){
 		this.id=idE;
 		this.type=typeE;
 
@@ -302,7 +309,5 @@ public class UserData implements Serializable {
 		this.isFlaggedForDelete=isFlaggedForDeleteE;
 
 		this.typeArm=typeArmE;
-		this.angleArm=angleArmE;
-		this.forceArm=forceArmE;
 	}
 }

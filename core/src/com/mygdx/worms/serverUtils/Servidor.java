@@ -56,9 +56,9 @@ public class Servidor {
     //			,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickXE,float posclickYE,int typeArmE){
 
     static void modPlayers(int idE,int typeE,float posxE,float posyE,int lifeE,boolean mustDestroyE,boolean destroyedE
-            ,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickXE,float posclickYE,int typeArmE,float angleArmE,float forceArmE){
+            ,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickXE,float posclickYE,int typeArmE){
         UserData t = players.get(idE);
-        t.modUserData(idE,typeE,posxE,posyE,lifeE,mustDestroyE,destroyedE,jumpE,countE,isFlaggedForDeleteE,posClickXE,posclickYE,typeArmE,angleArmE,forceArmE);
+        t.modUserData(idE,typeE,posxE,posyE,lifeE,mustDestroyE,destroyedE,jumpE,countE,isFlaggedForDeleteE,posClickXE,posclickYE,typeArmE);
     }
 
     static public void setStartGame(){
