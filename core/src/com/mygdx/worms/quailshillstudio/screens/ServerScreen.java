@@ -24,15 +24,14 @@ public class ServerScreen extends AbstractScreen {
     private Table table,tableNet;
     private Skin uiSkin;
     private int admin;
-    private String username;
+    //private String ip;
 
     //creando el cliente
     private Persona persona = new Persona(1);
 
-	public ServerScreen(String username,int admin) {
+	public ServerScreen(int admin) {
 		super();
 		this.admin=admin;
-		this.username=username;
 		//txtrBg   = new Texture( Gdx.files.internal("img/level_select_bg.png") );
 	}
 
@@ -42,7 +41,7 @@ public class ServerScreen extends AbstractScreen {
         uiSkin = new Skin(Gdx.files.internal(ConfigGen.fileSkin));
 
         final HashMap<Integer,UserData> testData = new HashMap<Integer, UserData>();
-        testData.put(0,new UserData(UserData.WORM,"SERVER","Cargando","Cargando",100));
+        testData.put(0,new UserData(UserData.WORM,"SERVER","Cargando","Cargando"));
 
 
 		// Anyadimos la imagen de fondo
@@ -75,7 +74,7 @@ public class ServerScreen extends AbstractScreen {
         addActor(volver);
 
         volver.addListener( UIFactory.createListener( ScreenEnum.SELECT ) );
-        if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, true,username,admin));
+        if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, true));
 	}
 	private void infoNetwork(){
 	    //creamos la cabecera
@@ -134,7 +133,7 @@ public class ServerScreen extends AbstractScreen {
             if (admin==1){
                 updateTableB(Servidor.getPlayers());
             }else {
-                HashMap<Integer, UserData> temp = persona.getDataServer("-","getData");
+                HashMap<Integer, UserData> temp = persona.getDataServer("getData","-");
                 if (temp != null) updateTableB(temp);
             }
         }

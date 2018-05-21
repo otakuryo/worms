@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PolygonClipping extends ApplicationAdapter {
+    /*
 	SpriteBatch batch;
 	Texture guns;
 	ShapeRenderer shapeRenderer;
@@ -81,17 +82,18 @@ public class PolygonClipping extends ApplicationAdapter {
         us.add(new UserData());
 		worm2 = us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
         //createBall(UserData.BOMB, new Vector2(10,30));
-        */
+
 	}
 
 	void create_world(){
         float relation=1f;
 
+
         //dibujamos imagen
         batch = new SpriteBatch();
         guns = new Texture("hud.png");
         world = new World(new Vector2(0, -9.81f), false);
-        //world.setContactListener(new WorldCollisions(this));
+        world.setContactListener(new WorldCollisions(this));
         renderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(Gdx.graphics.getWidth()/relation,Gdx.graphics.getHeight()/relation);
 
@@ -108,12 +110,12 @@ public class PolygonClipping extends ApplicationAdapter {
         polyVerts.add(grFix);
         mustCreate = true;
 
-        //UserData.createBall(UserData.BALL, 0,0,camera,world);
+        UserData.createBall(UserData.BALL, new Vector2(0,0),world);
         us.add(new UserData());
-        //worm1 = us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world,"1");
+        worm1 = us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world);
 
         us.add(new UserData());
-        //worm2 = us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world,"2");
+        worm2 = us.get(1).createWorm(UserData.WORM, new Vector2(30, 50),world);
         //createBall(UserData.BOMB, new Vector2(10,30));
 
     }
@@ -174,7 +176,7 @@ public class PolygonClipping extends ApplicationAdapter {
 
 		//Dibujamos el HUD
         hudBase();
-        */
+
 
     }
     void create_render(){
@@ -197,8 +199,8 @@ public class PolygonClipping extends ApplicationAdapter {
             }else{
                 type = UserData.BOMB;
             }
-            //Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-			UserData.createBall(type, Gdx.input.getX(), Gdx.input.getY(),camera,world);
+            Vector3 box2Dpos = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+            UserData.createBall(type, new Vector2(box2Dpos.x, box2Dpos.y),world);
         }
 
         //en esta parte eliminamos parte del mapa si es que colisiona
@@ -338,12 +340,13 @@ public class PolygonClipping extends ApplicationAdapter {
 
 		//Movimiento del personaje
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-		    us.get(player).wormJump();
+		    us.get(player).wormAngleUp();
 		}
 		//salto del player,
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
 			//UserData us = (UserData) worm1.getUserData();
 			us.get(player).wormJump();
+			System.out.println("Grade up"+worm1.getLinearVelocity().x);
 		}
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
@@ -394,4 +397,5 @@ public class PolygonClipping extends ApplicationAdapter {
 		camera.position.x = MathUtils.clamp(camera.position.x, effectiveViewportWidth / 2f, maxPoint - effectiveViewportWidth / 2f);
 		camera.position.y = MathUtils.clamp(camera.position.y, effectiveViewportHeight / 2f, maxPoint - effectiveViewportHeight / 2f);
 	}
+	*/
 }

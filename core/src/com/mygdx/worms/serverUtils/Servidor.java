@@ -52,19 +52,8 @@ public class Servidor {
         players.put(id,usuario);
     }
 
-    //public void modUserData(int idE,String usernameE,int typeE,float posXE,float posYE,int lifeE,boolean mustDestroyE,boolean destroyedE
-    //			,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickXE,float posclickYE,int typeArmE){
-
-    static void modPlayers(int idE,int typeE,float posxE,float posyE,int lifeE,boolean mustDestroyE,boolean destroyedE
-            ,boolean jumpE,int countE,boolean isFlaggedForDeleteE,float posClickXE,float posclickYE,int typeArmE,float angleArmE,float forceArmE){
-        UserData t = players.get(idE);
-        t.modUserData(idE,typeE,posxE,posyE,lifeE,mustDestroyE,destroyedE,jumpE,countE,isFlaggedForDeleteE,posClickXE,posclickYE,typeArmE,angleArmE,forceArmE);
-    }
-
     static public void setStartGame(){
-        UserData usTemp = players.get(0);
-        usTemp.setStart();
-        //players.get(0).comenzar = "comenzarpartida";
+        players.get(0).comenzar = "comenzarpartida";
     }
 
     /*

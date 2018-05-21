@@ -69,12 +69,11 @@ public class UserData implements Serializable {
         count=0;
     }
 
-	public UserData(int type,String username,String userIP,String team,int id) {
+	public UserData(int type,String username,String userIP,String team) {
 		this.typeObj = type;
 		this.username = username;
 		this.userIP = userIP;
 		this.team = team;
-		this.id=id;
 		count=0;
 	}
 
