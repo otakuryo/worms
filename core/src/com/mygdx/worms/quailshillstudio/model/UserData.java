@@ -69,11 +69,12 @@ public class UserData implements Serializable {
         count=0;
     }
 
-	public UserData(int type,String username,String userIP,String team) {
+	public UserData(int type,String username,String userIP,String team,int id) {
 		this.typeObj = type;
 		this.username = username;
 		this.userIP = userIP;
 		this.team = team;
+		this.id=id;
 		count=0;
 	}
 
@@ -100,7 +101,6 @@ public class UserData implements Serializable {
         }
 	}
 	public void wormLeft(){
-        System.out.println(worm1.getPosition().x+" . "+worm1.getPosition().y);
 	    if (!jump){
 		    worm1.setLinearVelocity(worm1.getLinearVelocity().x,0);
 		    worm1.applyForceToCenter(-20f, 0f, true);
@@ -108,7 +108,6 @@ public class UserData implements Serializable {
 	}
 
 	public void wormRight() {
-        System.out.println(worm1.getPosition().x+" . "+worm1.getPosition().y);
         if (!jump) {
             worm1.setLinearVelocity(worm1.getLinearVelocity().x, 0);
             worm1.applyForceToCenter(20f, 0f, true);
@@ -116,14 +115,12 @@ public class UserData implements Serializable {
 	}
 
     public void wormAngleUpL() {
-        System.out.println(worm1.getPosition().x+" . "+worm1.getPosition().y);
         if (!jump) {
             worm1.setAngularVelocity(2);
         }
     }
 
 	public void wormAngleUpR() {
-        System.out.println(worm1.getPosition().x+" . "+worm1.getPosition().y);
 		if (!jump) {
 			worm1.setAngularVelocity(-2);
 		}

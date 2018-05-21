@@ -24,14 +24,15 @@ public class ServerScreen extends AbstractScreen {
     private Table table,tableNet;
     private Skin uiSkin;
     private int admin;
-    //private String ip;
+    private String username;
 
     //creando el cliente
-    private Persona persona = new Persona(1);
+    public Persona persona = new Persona(1);
 
-	public ServerScreen(int admin) {
+	public ServerScreen(String username,int admin) {
 		super();
 		this.admin=admin;
+		this.username=username;
 		//txtrBg   = new Texture( Gdx.files.internal("img/level_select_bg.png") );
 	}
 
@@ -41,7 +42,7 @@ public class ServerScreen extends AbstractScreen {
         uiSkin = new Skin(Gdx.files.internal(ConfigGen.fileSkin));
 
         final HashMap<Integer,UserData> testData = new HashMap<Integer, UserData>();
-        testData.put(0,new UserData(UserData.WORM,"SERVER","Cargando","Cargando"));
+        testData.put(0,new UserData(UserData.WORM,"SERVER","Cargando","Cargando",100));
 
 
 		// Anyadimos la imagen de fondo
@@ -74,7 +75,7 @@ public class ServerScreen extends AbstractScreen {
         addActor(volver);
 
         volver.addListener( UIFactory.createListener( ScreenEnum.SELECT ) );
-        if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, true));
+        if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, true,username,admin,persona));
 	}
 	private void infoNetwork(){
 	    //creamos la cabecera
@@ -116,10 +117,9 @@ public class ServerScreen extends AbstractScreen {
 
             table.add(new Label(pair.getKey()+" - "+ud.getUsername() + " - " + ud.getTeam()+" - "+ud.getUserIP()+" - "+ud.comenzar, uiSkin));
             table.row().spaceTop(10);
-            if (ud.comenzar.contains("comenzarpartida")) ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false);
             //it.remove(); // avoids a ConcurrentModificationException
-
         }
+        if (player.get(0).comenzar.contains("comenzarpartida")) ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false,username,admin,persona);
         addActor(table);
     }
 

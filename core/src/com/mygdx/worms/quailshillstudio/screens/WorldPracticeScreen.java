@@ -94,7 +94,7 @@ public class WorldPracticeScreen extends AbstractScreen {
         batch = new SpriteBatch();
         help = new Texture("helpKeys.png");
         world = new World(new Vector2(0, -9.81f), false);
-        //world.setContactListener(new WorldCollisions(this));
+        world.setContactListener(new WorldCollisions(this));
         renderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(Gdx.graphics.getWidth()/relation,Gdx.graphics.getHeight()/relation);
 
@@ -116,11 +116,11 @@ public class WorldPracticeScreen extends AbstractScreen {
         //us.get(0).createWorm(UserData.WORM, new Vector2(20, 40),world);
 
         //forma 2
-        wUS.put(0,new UserData(UserData.WORM,"ariel","127.0.0.1","GerardTeam"));
+        wUS.put(0,new UserData(UserData.WORM,"ariel","127.0.0.1","GerardTeam",0));
         wUS.get(0).createWorm(new Vector2(115, 48),world);
 
 
-        wUS.put(1,new UserData(UserData.WORM,"ryo","127.0.0.1","FernandoTeam"));
+        wUS.put(1,new UserData(UserData.WORM,"ryo","127.0.0.1","FernandoTeam",1));
         wUS.get(1).createWorm(new Vector2(70, 48),world);
         //us.add(new UserData());
         //wUS.get(0).createWorm(UserData.WORM, new Vector2(20, 35),world,"ryo");
