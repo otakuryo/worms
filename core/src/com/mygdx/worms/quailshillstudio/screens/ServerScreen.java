@@ -10,6 +10,7 @@ import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
 import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
 import com.mygdx.worms.quailshillstudio.utils.UIFactory;
+import com.mygdx.worms.serverUtils.Cliente;
 import com.mygdx.worms.serverUtils.Persona;
 import com.mygdx.worms.serverUtils.Servidor;
 
@@ -30,7 +31,7 @@ public class ServerScreen extends AbstractScreen {
     private boolean started = false;
 
     //creando el cliente
-    public Persona persona = new Persona(1);
+    //public Persona persona = new Persona(1);
 
 	public ServerScreen(String username,int admin) {
 		super();
@@ -78,7 +79,7 @@ public class ServerScreen extends AbstractScreen {
         addActor(volver);
 
         volver.addListener( UIFactory.createListener( ScreenEnum.SELECT ) );
-        if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, true,username,admin,persona,Servidor.getPlayers()));
+        if (admin==1) crear.addListener(UIFactory.createListener(ScreenEnum.GAME, true,username,admin,Servidor.getPlayers()));
 	}
 	private void infoNetwork(){
 	    //creamos la cabecera
@@ -123,26 +124,31 @@ public class ServerScreen extends AbstractScreen {
             //it.remove(); // avoids a ConcurrentModificationException
         }
         addActor(table);
-        if (player.get(0).comenzar.contains("comenzarpartida")) {
-            ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false, username, admin, persona, player);
+        if (player != null && player.get(0).comenzar.contains("comenzarpartida")) {
+            ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false, username, admin, Cliente.getPlayersTemp());
         }
 
     }
+
+
 
     private int sec;
     @Override
     public void render(float delta) {
         super.render(delta);
         sec++;
-        if (sec%10==0){
-            System.out.println("Actualizando base de datos");
+        //if (sec%10==0){
             //getAndUpdateData();
             if (admin==1){
+                //System.out.println("s: Actualizando base de datos");
                 updateTableB(Servidor.getPlayers());
             }else {
-                HashMap<Integer, UserData> temp = persona.getDataServer("getData", "-");
+                //System.out.println("c: Actualizando base de datos");
+                Cliente.refresh();
+                HashMap<Integer, UserData> temp = Cliente.getPlayersTemp();
+                //HashMap<Integer, UserData> temp = persona.getDataServer("getData", "-");
                 if (temp != null) updateTableB(temp);
             }
-        }
+        //}
     }
 }

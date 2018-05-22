@@ -20,6 +20,7 @@ import com.mygdx.worms.quailshillstudio.polygonClippingUtils.GroundFixture;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.PolygonBox2DShape;
 import com.mygdx.worms.quailshillstudio.polygonClippingUtils.WorldCollisions;
 import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
+import com.mygdx.worms.serverUtils.Cliente;
 import com.mygdx.worms.serverUtils.Persona;
 import com.mygdx.worms.serverUtils.Servidor;
 
@@ -30,8 +31,6 @@ public class WorldScreen  extends AbstractScreen {
     public int id;
     private String username;
     int admin;
-
-    private Persona persona;
 
     //altura y ancho nativos
     private int genW, genH;
@@ -66,13 +65,13 @@ public class WorldScreen  extends AbstractScreen {
 
     //tiempo
     private float totalTime = 30;
+    private boolean start=false,render=false;
 
     //worms
     private HashMap<Integer,UserData> wUS = new HashMap<Integer, UserData>();
 
-    public WorldScreen(String username,int admin,Persona persona, HashMap<Integer,UserData> players) {
+    public WorldScreen(String username,int admin, HashMap<Integer,UserData> players) {
         //Gdx.graphics.setContinuousRendering(false);
-        this.persona = persona;
         this.username = username;
         this.admin=admin;
         setIdPlayer(players);
@@ -119,6 +118,7 @@ public class WorldScreen  extends AbstractScreen {
             //if (ud.comenzar.contains("comenzarpartida")) ScreenManager.getInstance().showScreen(ScreenEnum.GAME, false);
             ic++;
         }
+        start=true;
         //System.out.println(id+" - "+username);
     }
 
@@ -182,11 +182,12 @@ public class WorldScreen  extends AbstractScreen {
         camera.update();
         handleInput(id);
 
+        /*
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render(world, camera.combined);
-
+        */
         //crea un objeto nuevo al pulsar
         if(Gdx.input.justTouched() && wUS.get(id).life>0){
             shootBoomb(id);
@@ -224,7 +225,7 @@ public class WorldScreen  extends AbstractScreen {
         box2dTimeStep(Gdx.graphics.getDeltaTime());
 
         //Dibujamos el HUD
-        if (wUS!=null) hudShootAndSearchDeath();
+        if (start && render && wUS!=null) hudShootAndSearchDeath();
 
         //dibuajdo de rotacion - beta, falla la rotacion :(
 
@@ -245,6 +246,7 @@ public class WorldScreen  extends AbstractScreen {
         shapeRenderer.circle(wUS.get(id).forceArm,wUS.get(id).forceArm,10);
         shapeRenderer.end();
 
+        tiempoCounter();
     }
 
 
@@ -278,7 +280,6 @@ public class WorldScreen  extends AbstractScreen {
     }
 
     private void hudShootAndSearchDeath(){
-
         //dibujamos el nombre del usuario
         for (int i = 0; i < wUS.size(); i++) {
             drawLifeBar(wUS.get(i).life,genH-(28*(i+2)),35);
@@ -303,7 +304,6 @@ public class WorldScreen  extends AbstractScreen {
             batch.draw(help, ConfigGen.SCREEN_WIDTH / 5, ConfigGen.SCREEN_HEIGHT / 6);
             batch.end();
         }
-        tiempoCounter();
     }
 
     private void tiempoCounter(){
@@ -313,6 +313,9 @@ public class WorldScreen  extends AbstractScreen {
 
         int min = ((int)totalTime) / 60;
         int sec = ((int)totalTime) % 60;
+        if (sec == 25){
+            render = true;
+        }
         if (sec<0){
             totalTime=31;
 
@@ -467,8 +470,13 @@ public class WorldScreen  extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        renderer.render(world, camera.combined);
         //actualizarDatos();
-        if (wUS!=null &&wUS.size()>0){
+        if (start && world!=null){
             create_render();
         }
     }
@@ -500,10 +508,9 @@ public class WorldScreen  extends AbstractScreen {
 
         if (admin==1){
             wUS = Servidor.getPlayers();
+            setIdPlayer(Servidor.getPlayers());
         }else {
-            wUS = persona.getDataServer("getData","-");
-
-            //if (wUS != null) updateTableB(temp);
+            setIdPlayer(Cliente.getPlayersTemp());
         }
         if (wUS!= null) System.out.println("size red: "+wUS.size());
     }

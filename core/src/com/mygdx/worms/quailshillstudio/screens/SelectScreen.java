@@ -10,6 +10,7 @@ import com.mygdx.worms.quailshillstudio.utils.ConfigGen;
 import com.mygdx.worms.quailshillstudio.utils.ScreenEnum;
 import com.mygdx.worms.quailshillstudio.utils.ScreenManager;
 import com.mygdx.worms.quailshillstudio.utils.UIFactory;
+import com.mygdx.worms.serverUtils.Cliente;
 import com.mygdx.worms.serverUtils.Persona;
 import com.mygdx.worms.serverUtils.Servidor;
 
@@ -71,6 +72,7 @@ public class SelectScreen extends AbstractScreen {
         unirse.addListener(new ClickListener() {
             public boolean touchDown(InputEvent e, float x, float y, int point, int button) {
                 if (!txtusername.getText().isEmpty() && !txtserver.getText().isEmpty() && !txtusername.getText().contains("srname")){
+                    createClient();
                     persona.setNewPlayer(txtusername.getText(),team.getSelected().toString(),txtserver.getText());
                     //persona.sendData();
                     ScreenManager.getInstance().showScreen(ScreenEnum.SERVER, txtusername.getText(),txtserver.getText(),team.getSelected(),0);
@@ -101,11 +103,26 @@ public class SelectScreen extends AbstractScreen {
 	private void createServer(){
         Thread one = new Thread() {
             public void run() {
-                    Servidor.iniciarServer();
+                Servidor.iniciarServer();
             }
         };
 
         one.start();
+        //le decimos al hilo principal que duerma una fraccion de segundo, para darle tiempo que inicie el servidor
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
+    }
+    private void createClient(){
+        Thread two = new Thread() {
+            public void run() {
+                new Cliente().run();
+            }
+        };
+
+        two.start();
         //le decimos al hilo principal que duerma una fraccion de segundo, para darle tiempo que inicie el servidor
         try {
             Thread.sleep(100);
